@@ -5,3 +5,598 @@ Version: 1.0.0
 Description: Thème enfant de Storefront - SAE R3.SAE01
 Text Domain: storefront-child
 */
+
+/* ==========================================================================
+   0. Polices — Arena Uno (Regular 400, Bold 700, Heavy 900)
+   ========================================================================== */
+@font-face {
+    font-family: 'Arena Uno';
+    src: url('fonts/ArenaUno-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Arena Uno';
+    src: url('fonts/ArenaUno-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Arena Uno';
+    src: url('fonts/ArenaUno-Heavy.otf') format('opentype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ==========================================================================
+   1. Tokens — Design System Café Feuillette
+   ========================================================================== */
+:root {
+    --font-titles: 'Arena Uno', 'Arial Black', sans-serif;
+    --font-text: 'Arena Uno', Arial, sans-serif;
+    --weight-titles: 900;
+
+    --color-gold: #A98E58;
+    --color-gold-light: #C4AA72;
+    --color-sage: #A4B08B;
+    --color-sage-dark: #636B53;
+    --color-cream: #F3F0E8;
+    --color-black: #1D1D1B;
+    --color-dark: #23282D;
+    --color-gray-dark: #333333;
+    --color-gray: #666666;
+    --color-bg: #F4F4F4;
+    --color-white: #FFFFFF;
+    --color-border: #EBEBEB;
+}
+
+/* ==========================================================================
+   2. Base
+   ========================================================================== */
+body {
+    font-family: var(--font-text);
+    color: var(--color-gray-dark);
+    background-color: var(--color-white);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-titles);
+    font-weight: var(--weight-titles);
+    color: var(--color-black);
+}
+
+a {
+    color: var(--color-black);
+}
+
+/* ==========================================================================
+   3. Boutique — Cartes produits (US-2.3)
+   ========================================================================== */
+
+/* Photo : format portrait, coins arrondis */
+ul.products li.product img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+/* Étiquette de catégorie : petite, dorée, en majuscules */
+ul.products li.product .product-card__category {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-gold);
+}
+
+/* Nom du produit : petit, en majuscules */
+ul.products li.product .woocommerce-loop-product__title {
+    font-family: var(--font-text);
+    font-size: 0.875rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-black);
+    margin-bottom: 0.25rem;
+}
+
+/* Prix : gras et noir */
+ul.products li.product .price {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-black);
+    margin-bottom: 1rem;
+}
+
+/* Bouton : noir, pleine largeur, en majuscules */
+ul.products li.product .button {
+    display: block;
+    width: 100%;
+    padding: 0.8em 1em;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--color-black);
+    color: var(--color-white);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+ul.products li.product .button:hover {
+    background-color: var(--color-gold);
+    color: var(--color-white);
+}
+
+/* ==========================================================================
+   4. Fiche produit (US-2.4)
+   ========================================================================== */
+
+/* Étiquette de catégorie dorée */
+.product-summary__category {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-gold);
+}
+
+/* Titre : en majuscules, graisse normale */
+.single-product div.product .product_title {
+    font-family: var(--font-text);
+    font-size: 1.75rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+
+/* Description courte : en gras, noire */
+.single-product div.product .woocommerce-product-details__short-description {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-black);
+    margin-bottom: 1.5rem;
+}
+
+/* Prix : très gros et très gras */
+.single-product div.product p.price {
+    font-family: var(--font-titles);
+    font-size: 2.25rem;
+    font-weight: 900;
+    color: var(--color-black);
+    margin-bottom: 1.5rem;
+}
+
+/* Quantité + bouton côte à côte */
+.single-product div.product form.cart {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.single-product div.product form.cart .quantity .qty {
+    width: 5rem;
+    height: 100%;
+    border: 1px solid var(--color-black);
+    border-radius: 6px;
+    background-color: var(--color-white);
+    text-align: center;
+}
+
+/* Bouton « Ajouter au panier » : noir, arrondi, en majuscules */
+.single-product div.product form.cart .button {
+    flex: 1;
+    padding: 1em 1.5em;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--color-black);
+    color: var(--color-white);
+    font-family: var(--font-text);
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.single-product div.product form.cart .button:hover {
+    background-color: var(--color-gold);
+}
+
+/* Miniatures : 3 colonnes de même largeur sous la grande photo */
+.single-product div.product .woocommerce-product-gallery .flex-control-thumbs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+/* Storefront ajoute un « clearfix » (::before / ::after) qui occuperait une case de la grille */
+.single-product div.product .woocommerce-product-gallery .flex-control-thumbs::before,
+.single-product div.product .woocommerce-product-gallery .flex-control-thumbs::after {
+    content: none;
+}
+
+/* Sélecteur aussi précis que celui de Storefront, pour annuler sa largeur de 11 % */
+.single-product div.product .woocommerce-product-gallery.woocommerce-product-gallery--columns-4 .flex-control-thumbs li {
+    float: none;
+    width: 100%;
+    margin: 0;
+}
+
+/* Chaque miniature remplit toute sa case, en carré */
+.single-product div.product .woocommerce-product-gallery .flex-control-thumbs img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+
+/* ==========================================================================
+   5. Bloc « Nos offres » : bandeau Click & Collect + boutons de catégories (US-2.3)
+   ========================================================================== */
+
+/* Le bandeau vert colle au header sur les pages concernées */
+.home .site-header,
+.post-type-archive-product .site-header,
+.tax-product_cat .site-header {
+    margin-bottom: 0;
+}
+
+/* Bandeau vert sauge, sur toute la largeur de l'écran */
+.offres__hero {
+    padding: 4rem 1.5rem;
+    background-color: var(--color-sage);
+    text-align: center;
+}
+
+/* Titre « CLICK & COLLECT » encadré de deux traits blancs */
+.offres__hero-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin: 0 0 1.5rem;
+    font-size: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--color-black);
+}
+
+.offres__hero-title::before,
+.offres__hero-title::after {
+    content: "";
+    flex: 0 1 8rem;
+    height: 2px;
+    border-radius: 2px;
+    background-color: var(--color-white);
+}
+
+.offres__hero-subtitle {
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    color: var(--color-black);
+}
+
+/* Encart blanc « Retrait : ... » */
+.offres__retrait {
+    display: inline-block;
+    margin: 0;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    background-color: var(--color-white);
+    font-size: 0.8rem;
+    color: var(--color-black);
+}
+
+/* Titre « Nos offres pour vos pauses déjeuner » */
+.offres__intro {
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+    text-align: center;
+}
+
+.offres__title {
+    margin-bottom: 0.5rem;
+    font-family: var(--font-text);
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--color-gold);
+}
+
+.offres__title strong {
+    font-family: var(--font-titles);
+    font-weight: 900;
+}
+
+.offres__text {
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    color: var(--color-black);
+}
+
+/* Boutons de catégories */
+.offres__filtres {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.offres__filtre {
+    padding: 0.75rem 1.75rem;
+    border: 1px solid var(--color-black);
+    border-radius: 6px;
+    background-color: var(--color-white);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    color: var(--color-black);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Bouton survolé, ou bouton de la page en cours : fond noir */
+.offres__filtre:hover,
+.offres__filtre:focus-visible,
+.offres__filtre.is-active {
+    background-color: var(--color-black);
+    color: var(--color-white);
+}
+
+/* ==========================================================================
+   6. Header (US-2.1)
+   ========================================================================== */
+
+/* Fond noir, sans les marges ni la bordure de Storefront */
+.site-header {
+    padding: 0;
+    border-bottom: none;
+    background-color: var(--color-black);
+}
+
+/* 3 colonnes : menu de gauche | enseigne | menu de droite */
+.header-feuillette {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 2rem;
+    height: 6.5rem;
+}
+
+/* Storefront ajoute un « clearfix » sur .col-full : il occuperait une case de la grille */
+.header-feuillette::before,
+.header-feuillette::after {
+    content: none;
+}
+
+.header-feuillette__nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.header-feuillette__nav--gauche {
+    justify-content: flex-end;
+}
+
+.header-feuillette__nav--droite {
+    justify-content: flex-start;
+}
+
+.header-feuillette__nav ul.menu {
+    display: flex;
+    gap: 2rem;
+    margin: 0;
+    list-style: none;
+}
+
+/* Liens du menu : blancs, petits, en majuscules
+   (sélecteur précis pour passer devant les couleurs du Customizer de Storefront) */
+.header-feuillette__nav ul.menu li a {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    color: var(--color-white);
+}
+
+.header-feuillette__nav ul.menu li a:hover,
+.header-feuillette__nav ul.menu li.current-menu-item > a {
+    color: var(--color-gold-light);
+}
+
+/* Enseigne suspendue : plus haute que le header, elle déborde dessous */
+.header-feuillette__logo {
+    position: relative;
+    z-index: 10;
+    align-self: start;
+    display: block;
+    width: 16rem;
+}
+
+.header-feuillette__logo img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* Bouton « Panier · 2 » en forme de pilule */
+.header-feuillette__nav a.header-feuillette__panier {
+    padding: 0.5rem 1.1rem;
+    border-radius: 999px;
+    background-color: var(--color-sage-dark);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    color: var(--color-white);
+}
+
+.header-feuillette__nav a.header-feuillette__panier:hover {
+    background-color: var(--color-gold);
+    color: var(--color-white);
+}
+
+/* Sur mobile : on masque les menus texte (Storefront affiche sa barre
+   de navigation en bas de l'écran), on garde l'enseigne et le panier */
+@media (max-width: 767px) {
+    .header-feuillette {
+        gap: 1rem;
+        height: 5rem;
+    }
+
+    .header-feuillette__nav ul.menu {
+        display: none;
+    }
+
+    .header-feuillette__logo {
+        width: 11rem;
+    }
+
+    .header-feuillette__nav--droite {
+        justify-content: flex-end;
+    }
+}
+
+/* ==========================================================================
+   7. Correctifs d'espacement
+   ========================================================================== */
+
+/* Storefront ajoute une marge sous le header sur ces pages, avec un sélecteur
+   plus précis que le nôtre. L'id du header (#masthead) passe devant. */
+.home #masthead,
+.post-type-archive-product #masthead,
+.tax-product_cat #masthead {
+    margin-bottom: 0;
+}
+
+/* Le titre de la Boutique est masqué (remplacé par le bandeau) :
+   on retire aussi l'espace vide qu'il réservait */
+.post-type-archive-product .woocommerce-products-header,
+.tax-product_cat .woocommerce-products-header {
+    display: none;
+}
+
+/* ==========================================================================
+   8. Footer (US-2.1)
+   ========================================================================== */
+
+/* Fond vert sauge */
+.site-footer {
+    padding: 2.5rem 0;
+    background-color: var(--color-sage);
+    color: var(--color-black);
+}
+
+/* 3 colonnes de même largeur */
+.footer-feuillette {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.footer-feuillette__titre {
+    margin: 0 0 0.25rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.footer-feuillette__adresse {
+    margin: 0;
+    font-size: 0.8rem;
+    font-style: normal;
+    line-height: 1.6;
+}
+
+.site-footer .footer-feuillette ul.footer-liens {
+    margin: 0;
+    list-style: none;
+}
+
+/* Liens : noirs, gras, en majuscules
+   (sélecteur précis pour passer devant les couleurs du Customizer de Storefront) */
+.site-footer .footer-feuillette ul.footer-liens li a {
+    display: inline-block;
+    padding: 0.15rem 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    color: var(--color-black);
+}
+
+.site-footer .footer-feuillette ul.footer-liens li a:hover {
+    color: var(--color-white);
+}
+
+/* Barre du bas vert foncé */
+.footer-barre {
+    padding: 1rem 0;
+    border-top: 1px solid var(--color-black);
+    background-color: var(--color-sage-dark);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-white);
+}
+
+.footer-barre__contenu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem 1.5rem;
+}
+
+/* Storefront ajoute un « clearfix » sur .col-full : il fausserait les espacements */
+.footer-barre__contenu::before,
+.footer-barre__contenu::after {
+    content: none;
+}
+
+.footer-barre__copyright {
+    margin: 0;
+}
+
+.footer-barre ul.footer-liens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0;
+    list-style: none;
+}
+
+/* Tiret entre deux liens : « Confidentialité - Mentions légales - CGV » */
+.footer-barre ul.footer-liens li + li::before {
+    content: "-";
+    margin-right: 0.75rem;
+}
+
+.footer-barre ul.footer-liens li a {
+    text-decoration: none;
+    color: var(--color-white);
+}
+
+.footer-barre ul.footer-liens li a:hover {
+    color: var(--color-gold-light);
+}
+
+/* Sur mobile : les 3 colonnes passent les unes sous les autres */
+@media (max-width: 767px) {
+    .footer-feuillette {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
