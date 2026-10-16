@@ -600,3 +600,26 @@ ul.products li.product .button:hover {
         gap: 1.5rem;
     }
 }
+/* ==========================================================================
+   9. Mobile : boutons de catégories sur une seule ligne, à faire défiler
+   ========================================================================== */
+@media (max-width: 767px) {
+    .offres__filtres {
+        flex-wrap: nowrap;              /* plus de retour à la ligne */
+        justify-content: flex-start;    /* on part de la gauche */
+        overflow-x: auto;               /* défilement horizontal */
+        scroll-snap-type: x mandatory;  /* le défilement « s'aimante » sur chaque bouton */
+        padding-bottom: 0.5rem;
+        scrollbar-width: none;          /* barre de défilement masquée (Firefox) */
+    }
+
+    .offres__filtres::-webkit-scrollbar {
+        display: none;                  /* barre de défilement masquée (Chrome, Safari) */
+    }
+
+    .offres__filtre {
+        flex: 0 0 auto;                 /* chaque bouton garde sa taille */
+        white-space: nowrap;
+        scroll-snap-align: start;
+    }
+}
