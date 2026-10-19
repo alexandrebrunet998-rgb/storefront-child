@@ -786,3 +786,314 @@ ul.products li.product .button:hover {
     text-align: right;
 }
 /* Fin du bloc US-4 */
+
+/* ==========================================================================
+   12. Page Panier (US-5.3)
+   ========================================================================== */
+
+/* Titre « MON PANIER » doré et sous-titre */
+.woocommerce-cart .entry-header .entry-title {
+    margin-bottom: 0.25rem;
+    font-size: 2rem;
+    text-transform: uppercase;
+    color: var(--color-gold);
+}
+
+.panier__intro {
+    margin-bottom: 1.5rem;
+    color: var(--color-black);
+}
+
+/* Sur ordinateur : produits à gauche, récapitulatif à droite */
+@media (min-width: 768px) {
+    .woocommerce-cart .woocommerce {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 22rem;
+        gap: 0 3rem;
+        align-items: start;
+    }
+
+    .woocommerce-cart .woocommerce > * {
+        grid-column: 1;
+    }
+
+    .woocommerce-cart .woocommerce > .cart-collaterals {
+        grid-column: 2;
+        grid-row: 1 / span 4;
+    }
+}
+
+/* Le tableau des produits devient une liste de cartes crème */
+.woocommerce-cart table.cart thead {
+    display: none;
+}
+
+.woocommerce-cart table.cart,
+.woocommerce-cart table.cart tbody,
+.woocommerce-cart table.cart tr {
+    display: block;
+    border: 0;
+    background: transparent;
+}
+
+.woocommerce-cart table.cart tr.cart_item {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr auto;
+    grid-template-areas:
+        "image nom      prix"
+        "image quantite retirer";
+    align-items: center;
+    gap: 0.25rem 1rem;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    background-color: var(--color-cream);
+}
+
+.woocommerce-cart table.cart tr.cart_item td {
+    display: block;
+    position: static;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    text-align: left;
+}
+
+/* On retire les libellés que Storefront ajoute sur mobile */
+.woocommerce-cart table.cart tr.cart_item td::before {
+    display: none;
+}
+
+.woocommerce-cart table.cart tr.cart_item td.product-thumbnail {
+    display: block;
+    grid-area: image;
+}
+
+.woocommerce-cart table.cart tr.cart_item td.product-thumbnail img {
+    width: 4.5rem;
+    max-width: none;
+    height: 4.5rem;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.woocommerce-cart table.cart tr.cart_item td.product-name {
+    grid-area: nom;
+}
+
+.woocommerce-cart table.cart tr.cart_item td.product-name a {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--color-black);
+}
+
+/* Options choisies (« Taille : M ») */
+.woocommerce-cart table.cart tr.cart_item td.product-name dl.variation {
+    margin: 0.25rem 0 0;
+    font-size: 0.75rem;
+}
+
+.woocommerce-cart table.cart tr.cart_item td.product-price {
+    display: none;
+}
+
+.woocommerce-cart table.cart tr.cart_item td.product-subtotal {
+    grid-area: prix;
+    font-weight: 700;
+    text-align: right;
+}
+
+.woocommerce-cart table.cart tr.cart_item td.product-quantity {
+    display: flex;
+    grid-area: quantite;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+}
+
+.woocommerce-cart table.cart tr.cart_item td.product-quantity::before {
+    display: inline;
+    content: "Quantité";
+    float: none;
+}
+
+.woocommerce-cart table.cart tr.cart_item td.product-quantity .qty {
+    width: 3.5rem;
+    padding: 0.3rem;
+    border: 1px solid var(--color-black);
+    border-radius: 6px;
+    background-color: var(--color-white);
+}
+
+/* Lien « Retirer » doré et souligné (Storefront le remplaçait par une icône) */
+.woocommerce-cart table.cart tr.cart_item td.product-remove {
+    grid-area: retirer;
+    text-align: right;
+}
+
+.woocommerce-cart table.cart tr.cart_item td.product-remove a.remove {
+    display: inline;
+    position: static;
+    width: auto;
+    height: auto;
+    text-indent: 0;
+    background: none;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-decoration: underline;
+    color: var(--color-gold);
+}
+
+.woocommerce-cart table.cart tr.cart_item td.product-remove a.remove::before {
+    display: none;
+}
+
+/* Ligne du code promo et du bouton « Mettre à jour le panier » */
+.woocommerce-cart table.cart td.actions {
+    display: block;
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+
+.woocommerce-cart table.cart td.actions .button {
+    border: 1px solid var(--color-black);
+    border-radius: 6px;
+    background-color: var(--color-white);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-black);
+}
+
+/* Récapitulatif : encadré crème à droite */
+.woocommerce-cart .cart-collaterals .cart_totals {
+    float: none;
+    width: 100%;
+    padding: 1.5rem;
+    border: 1px solid var(--color-black);
+    border-radius: 8px;
+    background-color: var(--color-cream);
+}
+
+.woocommerce-cart .cart-collaterals .cart_totals h2 {
+    margin-bottom: 1rem;
+    font-family: var(--font-text);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.woocommerce-cart .cart_totals table.shop_table {
+    margin-bottom: 1rem;
+    border: 0;
+    background: transparent;
+}
+
+.woocommerce-cart .cart_totals table.shop_table th,
+.woocommerce-cart .cart_totals table.shop_table td {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(29, 29, 27, 0.15);
+    background: transparent;
+    font-size: 0.8rem;
+}
+
+.woocommerce-cart .cart_totals table.shop_table td {
+    text-align: right;
+}
+
+.woocommerce-cart .cart_totals table.shop_table tr.order-total th,
+.woocommerce-cart .cart_totals table.shop_table tr.order-total td {
+    border-bottom: 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+/* Mode de réception : la ligne prend toute la largeur de l'encadré */
+.woocommerce-cart .cart_totals tr.woocommerce-shipping-totals th,
+.woocommerce-cart .cart_totals tr.woocommerce-shipping-totals td {
+    display: block;
+    width: 100%;
+    text-align: left;
+}
+
+/* Chaque mode de réception devient une carte cliquable, la carte choisie en noir */
+.woocommerce-cart ul#shipping_method {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+    list-style: none;
+}
+
+.woocommerce-cart ul#shipping_method li {
+    position: relative;
+    margin: 0;
+}
+
+.woocommerce-cart ul#shipping_method li input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.woocommerce-cart ul#shipping_method li label {
+    display: block;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-black);
+    border-radius: 8px;
+    background-color: var(--color-white);
+    font-weight: 700;
+    color: var(--color-black);
+    cursor: pointer;
+}
+
+.woocommerce-cart ul#shipping_method li input[type="radio"]:checked + label {
+    background-color: var(--color-black);
+    color: var(--color-white);
+}
+
+/* Contour visible au clavier (accessibilité) */
+.woocommerce-cart ul#shipping_method li input[type="radio"]:focus-visible + label {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+}
+
+/* Bouton « Valider la commande » noir */
+.woocommerce-cart .wc-proceed-to-checkout .checkout-button {
+    display: block;
+    width: 100%;
+    padding: 1em;
+    border: 0;
+    border-radius: 6px;
+    background-color: var(--color-black);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-white);
+}
+
+.woocommerce-cart .wc-proceed-to-checkout .checkout-button:hover {
+    background-color: var(--color-gold);
+    color: var(--color-white);
+}
+
+.panier__continuer {
+    display: block;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--color-black);
+}
+/* Fin du bloc US-5 */
+
+/* Titre « MON PANIER » aligné à gauche, collé à l'intro, comme dans la maquette */
+.woocommerce-cart .hentry .entry-header {
+    margin-bottom: 0.5rem;
+    padding-bottom: 0;
+    text-align: left;
+}
+/* Fin du correctif US-5 */

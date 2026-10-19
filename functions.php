@@ -525,3 +525,29 @@ add_action('woocommerce_single_product_summary', function () {
     <?php
 }, 22);
 /* Fin du bloc US-4 */
+
+/* ==========================================================================
+   Page Panier (US-5.3)
+   ========================================================================== */
+
+/**
+ * Sous-titre sous « Mon panier ».
+ */
+add_action('woocommerce_before_cart', function () {
+    echo '<p class="panier__intro">Vérifiez votre panier, choisissez votre mode de réception, puis validez.</p>';
+}, 5);
+
+/**
+ * Lien « Retirer » à la place de la petite croix, comme dans la maquette.
+ */
+add_filter('woocommerce_cart_item_remove_link', function ($lien) {
+    return str_replace('&times;', 'Retirer', $lien);
+});
+
+/**
+ * Lien « Continuer mes achats » sous le bouton de validation.
+ */
+add_action('woocommerce_proceed_to_checkout', function () {
+    echo '<a class="panier__continuer" href="' . esc_url(wc_get_page_permalink('shop')) . '">Continuer mes achats</a>';
+}, 30);
+/* Fin du bloc US-5 */
