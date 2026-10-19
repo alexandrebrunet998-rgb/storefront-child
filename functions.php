@@ -614,3 +614,17 @@ add_filter('woocommerce_checkout_fields', function ($champs) {
     return $champs;
 });
 /* Fin du bloc US-6 */
+
+/* ==========================================================================
+   Espace client (US-7.2)
+   ========================================================================== */
+
+/**
+ * Menu du compte : on retire « Téléchargements », la boutique ne vend aucun produit téléchargeable.
+ */
+add_filter('woocommerce_account_menu_items', function ($onglets) {
+    unset($onglets['downloads']);
+
+    return $onglets;
+});
+/* Fin du bloc US-7 */

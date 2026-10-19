@@ -1283,3 +1283,196 @@ ul.products li.product .button:hover {
     background-color: var(--color-gold);
 }
 /* Fin du bloc US-6 */
+
+/* ==========================================================================
+   14. Espace client « Mon compte » (US-7.2)
+   ========================================================================== */
+
+/* Titre « MON COMPTE » doré, aligné à gauche */
+.woocommerce-account .hentry .entry-header {
+    margin-bottom: 0.5rem;
+    padding-bottom: 0;
+    text-align: left;
+}
+
+.woocommerce-account .entry-header .entry-title {
+    font-size: 2rem;
+    text-transform: uppercase;
+    color: var(--color-gold);
+}
+
+/* Connexion et inscription : deux cartes crème côte à côte */
+.woocommerce-account #customer_login {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: 2rem;
+}
+
+.woocommerce-account #customer_login::before,
+.woocommerce-account #customer_login::after {
+    content: none;
+}
+
+.woocommerce-account #customer_login .u-column1,
+.woocommerce-account #customer_login .u-column2 {
+    float: none;
+    width: auto;
+    margin: 0;
+    padding: 1.5rem;
+    border-radius: 8px;
+    background-color: var(--color-cream);
+}
+
+.woocommerce-account #customer_login h2 {
+    font-family: var(--font-text);
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-black);
+}
+
+/* Champs des formulaires */
+.woocommerce-account form .form-row label {
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.woocommerce-account form .input-text,
+.woocommerce-account form select {
+    padding: 0.7rem 0.9rem;
+    border: 1px solid var(--color-black);
+    border-radius: 6px;
+    background-color: var(--color-white);
+    box-shadow: none;
+}
+
+/* Boutons noirs, comme sur le reste du site */
+.woocommerce-account form .button,
+.woocommerce-account .woocommerce-MyAccount-content .button {
+    padding: 0.8em 1.5em;
+    border: 0;
+    border-radius: 6px;
+    background-color: var(--color-black);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-white);
+}
+
+.woocommerce-account form .button:hover,
+.woocommerce-account .woocommerce-MyAccount-content .button:hover {
+    background-color: var(--color-gold);
+    color: var(--color-white);
+}
+
+.woocommerce-account .woocommerce-LostPassword a {
+    font-size: 0.8rem;
+    color: var(--color-black);
+}
+
+/* Une fois connecté, sur ordinateur : menu à gauche, contenu à droite */
+@media (min-width: 768px) {
+    .woocommerce-account.logged-in .woocommerce {
+        display: grid;
+        grid-template-columns: 15rem minmax(0, 1fr);
+        gap: 0 3rem;
+        align-items: start;
+    }
+
+    .woocommerce-account .woocommerce-MyAccount-navigation,
+    .woocommerce-account .woocommerce-MyAccount-content {
+        float: none;
+        width: auto;
+        margin: 0;
+    }
+}
+
+/* Menu du compte : des boutons, la page en cours en noir */
+.woocommerce-account .woocommerce-MyAccount-navigation ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0 0 1.5rem;
+    border: 0;
+    list-style: none;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation ul li {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation ul li a {
+    display: block;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-black);
+    border-radius: 8px;
+    background-color: var(--color-white);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    color: var(--color-black);
+}
+
+/* Storefront ajoute une petite icône sur chaque lien : on la retire */
+.woocommerce-account .woocommerce-MyAccount-navigation ul li a::before {
+    display: none;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation ul li.is-active a,
+.woocommerce-account .woocommerce-MyAccount-navigation ul li a:hover {
+    background-color: var(--color-black);
+    color: var(--color-white);
+}
+
+/* Sur mobile : les boutons du menu se rangent en ligne */
+@media (max-width: 767px) {
+    .woocommerce-account .woocommerce-MyAccount-navigation ul {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}
+
+/* Contenu du compte : carte crème */
+.woocommerce-account .woocommerce-MyAccount-content {
+    padding: 1.5rem;
+    border-radius: 8px;
+    background-color: var(--color-cream);
+}
+
+.woocommerce-account .woocommerce-MyAccount-content table.shop_table th,
+.woocommerce-account .woocommerce-MyAccount-content table.shop_table td {
+    border-bottom: 1px solid rgba(29, 29, 27, 0.15);
+    background: transparent;
+    font-size: 0.8rem;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content h2,
+.woocommerce-account .woocommerce-MyAccount-content h3 {
+    font-family: var(--font-text);
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+/* Fin du bloc US-7 */
+
+/* Correctif : marge intérieure des boutons du menu du compte
+   (sélecteur plus précis que celui de Storefront) */
+body.woocommerce-account .woocommerce-MyAccount-navigation ul li.woocommerce-MyAccount-navigation-link a {
+    padding: 0.75rem 1rem;
+}
+/* Fin du correctif US-7 */
+
+/* Correctif renforcé : Storefront impose une marge intérieure horizontale nulle
+   aux liens du menu du compte ; !important est justifié ici pour passer devant
+   une règle du thème parent qu'on ne peut pas modifier. */
+.woocommerce-MyAccount-navigation ul li a {
+    padding-right: 1rem !important;
+    padding-left: 1rem !important;
+}
+/* Fin du correctif renforcé US-7 */
