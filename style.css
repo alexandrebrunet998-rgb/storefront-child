@@ -1097,3 +1097,189 @@ ul.products li.product .button:hover {
     text-align: left;
 }
 /* Fin du correctif US-5 */
+
+/* ==========================================================================
+   13. Page Commande / checkout (US-6)
+   ========================================================================== */
+
+/* Titre aligné à gauche, comme « MON PANIER » */
+.woocommerce-checkout .hentry .entry-header {
+    margin-bottom: 0.5rem;
+    padding-bottom: 0;
+    text-align: left;
+}
+
+.woocommerce-checkout .entry-header .entry-title {
+    font-size: 2rem;
+    text-transform: uppercase;
+    color: var(--color-gold);
+}
+
+/* Titres des sections : « DÉTAILS DE FACTURATION », « VOTRE COMMANDE »... */
+.woocommerce-checkout h3 {
+    font-family: var(--font-text);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-black);
+}
+
+/* Champs du formulaire */
+.woocommerce-checkout form .form-row label {
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.woocommerce-checkout form .form-row .input-text,
+.woocommerce-checkout form .form-row select {
+    padding: 0.7rem 0.9rem;
+    border: 1px solid var(--color-black);
+    border-radius: 6px;
+    background-color: var(--color-white);
+    box-shadow: none;
+}
+
+/* Récapitulatif : encadré crème */
+.woocommerce-checkout #order_review {
+    padding: 1.5rem;
+    border: 1px solid var(--color-black);
+    border-radius: 8px;
+    background-color: var(--color-cream);
+}
+
+.woocommerce-checkout #order_review table.shop_table {
+    border: 0;
+    background: transparent;
+}
+
+.woocommerce-checkout #order_review table.shop_table th,
+.woocommerce-checkout #order_review table.shop_table td {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(29, 29, 27, 0.15);
+    background: transparent;
+    font-size: 0.8rem;
+}
+
+/* Modes de réception en cartes, comme dans le panier */
+.woocommerce-checkout ul#shipping_method {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+    list-style: none;
+}
+
+.woocommerce-checkout ul#shipping_method li {
+    position: relative;
+    margin: 0;
+}
+
+.woocommerce-checkout ul#shipping_method li input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+}
+
+.woocommerce-checkout ul#shipping_method li label {
+    display: block;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-black);
+    border-radius: 8px;
+    background-color: var(--color-white);
+    font-weight: 700;
+    color: var(--color-black);
+    cursor: pointer;
+}
+
+.woocommerce-checkout ul#shipping_method li input[type="radio"]:checked + label {
+    background-color: var(--color-black);
+    color: var(--color-white);
+}
+
+.woocommerce-checkout ul#shipping_method li input[type="radio"]:focus-visible + label {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+}
+
+/* Encadré vert « Instructions pour le retrait » */
+.woocommerce-checkout #order_review tr.instructions-retrait-ligne td {
+    padding: 0.5rem 0;
+    border: 0;
+}
+
+.instructions-retrait {
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    background-color: var(--color-sage);
+}
+
+.instructions-retrait .instructions-retrait__titre {
+    margin: 0 0 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-black);
+}
+
+.instructions-retrait .instructions-retrait__texte {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--color-black);
+}
+
+/* Moyens de paiement en cartes */
+.woocommerce-checkout #payment {
+    background: transparent;
+}
+
+.woocommerce-checkout #payment ul.payment_methods {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0;
+    border: 0;
+    list-style: none;
+}
+
+.woocommerce-checkout #payment ul.payment_methods li {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-black);
+    border-radius: 8px;
+    background-color: var(--color-white);
+}
+
+.woocommerce-checkout #payment ul.payment_methods li label {
+    font-weight: 700;
+}
+
+.woocommerce-checkout #payment div.payment_box {
+    margin: 0.5rem 0 0;
+    padding: 0.5rem 0 0;
+    background: transparent;
+    font-size: 0.75rem;
+}
+
+.woocommerce-checkout #payment div.payment_box::before {
+    display: none;
+}
+
+/* Bouton « Commander » noir */
+.woocommerce-checkout #payment #place_order {
+    width: 100%;
+    padding: 1em;
+    border: 0;
+    border-radius: 6px;
+    background-color: var(--color-black);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-white);
+}
+
+.woocommerce-checkout #payment #place_order:hover {
+    background-color: var(--color-gold);
+}
+/* Fin du bloc US-6 */

@@ -551,3 +551,66 @@ add_action('woocommerce_proceed_to_checkout', function () {
     echo '<a class="panier__continuer" href="' . esc_url(wc_get_page_permalink('shop')) . '">Continuer mes achats</a>';
 }, 30);
 /* Fin du bloc US-5 */
+
+/* ==========================================================================
+   Checkout (US-6.1 / US-6.2)
+   ========================================================================== */
+
+/**
+ * Le client a-t-il choisi le retrait en boutique ?
+ * (Notre « Retrait en boutique » utilise le mode « Livraison gratuite » de WooCommerce.)
+ */
+function feuillette_retrait_choisi() {
+    if (!WC()->session) {
+        return false;
+    }
+
+    $modes = (array) WC()->session->get('chosen_shipping_methods');
+
+    foreach ($modes as $mode) {
+        if (strpos((string) $mode, 'free_shipping') === 0 || strpos((string) $mode, 'local_pickup') === 0) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Encadré vert « Instructions pour le retrait » dans le récapitulatif de commande,
+ * juste après le mode de réception. WooCommerce recalcule ce récapitulatif à chaque
+ * changement de mode : l'encadré apparaît ou disparaît donc tout seul.
+ * Le texte se modifie dans le back office : Pages > Commande > « Instructions pour le retrait ».
+ */
+add_action('woocommerce_review_order_after_shipping', function () {
+    if (!function_exists('get_field') || !feuillette_retrait_choisi()) {
+        return;
+    }
+
+    $instructions = get_field('instructions_pour_le_retrait', wc_get_page_id('checkout'));
+
+    if (!$instructions) {
+        return;
+    }
+    ?>
+    <tr class="instructions-retrait-ligne">
+        <td colspan="2">
+            <div class="instructions-retrait">
+                <p class="instructions-retrait__titre">Instructions pour le retrait</p>
+                <p class="instructions-retrait__texte"><?php echo nl2br(esc_html($instructions)); ?></p>
+            </div>
+        </td>
+    </tr>
+    <?php
+});
+
+/**
+ * Formulaire plus court : pas de champ « Entreprise » ni de complément d'adresse.
+ */
+add_filter('woocommerce_checkout_fields', function ($champs) {
+    unset($champs['billing']['billing_company'], $champs['billing']['billing_address_2']);
+    unset($champs['shipping']['shipping_company'], $champs['shipping']['shipping_address_2']);
+
+    return $champs;
+});
+/* Fin du bloc US-6 */
