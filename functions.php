@@ -366,7 +366,97 @@ add_action('wp', function () {
 
     remove_action('storefront_before_content', 'woocommerce_breadcrumb', 10);
 
-    if (is_front_page()) {
+     if (is_front_page()) {
         remove_action('storefront_page', 'storefront_page_header', 10);
     }
 });
+
+
+/* ==========================================================================
+   Produits variables (US-3.2)
+   ========================================================================== */
+
+/**
+ * Script qui transforme les menus déroulants des options en boutons.
+ */
+add_action('wp_enqueue_scripts', function () {
+    if (!is_product()) {
+        return;
+    }
+
+    $fichier = '/js/feuillette-variations.js';
+
+    wp_enqueue_script(
+        'feuillette-variations',
+        get_stylesheet_directory_uri() . $fichier,
+        ['jquery', 'wc-add-to-cart-variation'],
+        filemtime(get_stylesheet_directory() . $fichier),
+        true
+    );
+}, 30);
+
+/**
+ * Sous chaque menu déroulant d'options, une rangée de boutons (S, M, L...).
+ * Le menu reste dans la page, caché : les boutons le pilotent.
+ */
+add_filter('woocommerce_dropdown_variation_attribute_options_html', function ($html, $args) {
+    $produit  = $args['product'];
+    $attribut = $args['attribute'];
+    $options  = $args['options'];
+    $nom      = $args['name'] ? $args['name'] : 'attribute_' . sanitize_title($attribut);
+
+    if (empty($options) && $produit && $attribut) {
+        $attributs = $produit->get_variation_attributes();
+        $options   = $attributs[$attribut] ?? [];
+    }
+
+    if (empty($options) || !$produit) {
+        return $html;
+    }
+
+    $choix = [];
+
+    if (taxonomy_exists($attribut)) {
+        $termes = wc_get_product_terms($produit->get_id(), $attribut, ['fields' => 'all']);
+
+        foreach ($termes as $terme) {
+            if (in_array($terme->slug, $options, true)) {
+                $choix[$terme->slug] = $terme->name;
+            }
+        }
+    } else {
+        foreach ($options as $option) {
+            $choix[$option] = $option;
+        }
+    }
+
+    $boutons = '';
+
+    foreach ($choix as $valeur => $libelle) {
+        $boutons .= sprintf(
+            '<button type="button" class="feuillette-options__bouton" data-valeur="%s" aria-pressed="false">%s</button>',
+            esc_attr($valeur),
+            esc_html($libelle)
+        );
+    }
+
+    return '<div class="feuillette-options__menu">' . $html . '</div>'
+        . '<div class="feuillette-options" data-attribut="' . esc_attr($nom) . '">' . $boutons . '</div>';
+}, 10, 2);
+
+/**
+ * Prix d'un produit variable : « à partir de 4,20 € » au lieu de « 4,20 € – 5,60 € ».
+ */
+add_filter('woocommerce_variable_price_html', function ($prix_html, $produit) {
+    $prix_min = $produit->get_variation_price('min', true);
+
+    return '<span class="prix-a-partir">à partir de</span> ' . wc_price($prix_min);
+}, 10, 2);
+
+/**
+ * Grille boutique : « Personnaliser » sur le bouton des produits variables.
+ */
+add_filter('woocommerce_product_add_to_cart_text', function ($texte, $produit) {
+    return $produit->is_type('variable') ? 'Personnaliser' : $texte;
+}, 10, 2);
+/* Fin du bloc US-3.2 */

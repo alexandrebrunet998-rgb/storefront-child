@@ -177,8 +177,9 @@ ul.products li.product .button:hover {
     margin-bottom: 1.5rem;
 }
 
-/* Quantité + bouton côte à côte */
-.single-product div.product form.cart {
+/* Quantité + bouton côte à côte (produits simples, et zone d'ajout des produits variables) */
+.single-product div.product form.cart:not(.variations_form),
+.single-product div.product .woocommerce-variation-add-to-cart {
     display: flex;
     gap: 0.75rem;
 }
@@ -600,6 +601,7 @@ ul.products li.product .button:hover {
         gap: 1.5rem;
     }
 }
+
 /* ==========================================================================
    9. Mobile : boutons de catégories sur une seule ligne, à faire défiler
    ========================================================================== */
@@ -622,4 +624,96 @@ ul.products li.product .button:hover {
         white-space: nowrap;
         scroll-snap-align: start;
     }
+}
+
+/* ==========================================================================
+   10. Produits variables : options en boutons (US-3.2)
+   ========================================================================== */
+
+/* Le tableau des options de WooCommerce devient une simple pile : libellé, puis boutons */
+.single-product div.product table.variations,
+.single-product div.product table.variations tbody,
+.single-product div.product table.variations tr,
+.single-product div.product table.variations th,
+.single-product div.product table.variations td {
+    display: block;
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+
+/* Libellé de l'option (« TAILLE », « LAIT »...) : petit, doré, en majuscules */
+.single-product div.product table.variations th.label label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-gold);
+}
+
+/* Le menu déroulant reste dans la page, mais caché : les boutons le pilotent */
+.feuillette-options__menu {
+    display: none;
+}
+
+/* Rangée de boutons */
+.feuillette-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0.5rem 0 1.25rem;
+}
+
+.feuillette-options__bouton {
+    min-width: 3.5rem;
+    padding: 0.8em 1.25em;
+    border: 1px solid var(--color-black);
+    border-radius: 8px;
+    background-color: var(--color-white);
+    font-family: var(--font-text);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-black);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.feuillette-options__bouton:hover {
+    background-color: var(--color-cream);
+    color: var(--color-black);
+}
+
+/* Option choisie : fond noir, comme dans la maquette */
+.feuillette-options__bouton.is-active,
+.feuillette-options__bouton.is-active:hover {
+    background-color: var(--color-black);
+    color: var(--color-white);
+}
+
+/* Option impossible avec les choix déjà faits */
+.feuillette-options__bouton:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    text-decoration: line-through;
+}
+
+/* Lien « Effacer » discret */
+.single-product div.product .reset_variations {
+    display: inline-block;
+    margin-bottom: 1rem;
+    font-size: 0.75rem;
+    color: var(--color-gray);
+}
+
+/* Le prix de la variante choisie s'affiche déjà en grand en haut (voir le script) :
+   on masque le petit doublon que WooCommerce affiche au-dessus du bouton */
+.single-product div.product .woocommerce-variation-price {
+    display: none;
+}
+
+/* « à partir de » : plus petit et plus léger que le prix lui-même */
+.prix-a-partir {
+    font-family: var(--font-text);
+    font-size: 0.6em;
+    font-weight: 700;
 }
