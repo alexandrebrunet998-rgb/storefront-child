@@ -717,3 +717,72 @@ ul.products li.product .button:hover {
     font-size: 0.6em;
     font-weight: 700;
 }
+/* ==========================================================================
+   11. Informations produit : encadré crème (US-4.3)
+   ========================================================================== */
+.infos-produit {
+    margin: 0 0 1.5rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: 8px;
+    background-color: var(--color-cream);
+}
+
+.infos-produit .infos-produit__titre {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-text);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-gold);
+}
+
+.infos-produit .infos-produit__titre:not(:first-child) {
+    margin-top: 1rem;
+}
+
+.infos-produit .infos-produit__texte {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-black);
+}
+
+.infos-produit .infos-produit__allergenes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    list-style: none;
+}
+
+.infos-produit .infos-produit__allergenes li {
+    padding: 0.35rem 0.8rem;
+    border-radius: 6px;
+    background-color: var(--color-black);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--color-white);
+}
+
+.single-product .infos-produit .infos-produit__nutrition {
+    width: 100%;
+    margin: 0;
+    border-collapse: collapse;
+    background: transparent;
+}
+
+.single-product .infos-produit .infos-produit__nutrition th,
+.single-product .infos-produit .infos-produit__nutrition td {
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--color-black);
+    background: transparent;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-black);
+}
+
+.single-product .infos-produit .infos-produit__nutrition td {
+    text-align: right;
+}
+/* Fin du bloc US-4 */

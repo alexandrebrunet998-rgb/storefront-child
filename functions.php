@@ -460,3 +460,68 @@ add_filter('woocommerce_product_add_to_cart_text', function ($texte, $produit) {
     return $produit->is_type('variable') ? 'Personnaliser' : $texte;
 }, 10, 2);
 /* Fin du bloc US-3.2 */
+
+/* ==========================================================================
+   Informations produit : composition, allergènes, valeurs nutritionnelles (US-4.3)
+   Les champs sont créés dans SCF > Groupes de champs (groupe « Informations produit »).
+   ========================================================================== */
+add_action('woocommerce_single_product_summary', function () {
+    if (!function_exists('get_field')) {
+        return;
+    }
+
+    $produit_id  = get_the_ID();
+    $composition = get_field('composition', $produit_id);
+    $allergenes  = get_field('allergenes', $produit_id);
+    $base        = get_field('nutrition_base', $produit_id);
+
+    $champs_nutrition = [
+        'energie'          => ['Énergie', 'kcal'],
+        'sucres'           => ['Sucres', 'g'],
+        'matieres_grasses' => ['Matières grasses', 'g'],
+    ];
+
+    $nutrition = [];
+
+    foreach ($champs_nutrition as $champ => [$libelle, $unite]) {
+        $valeur = get_field($champ, $produit_id);
+
+        if ($valeur !== null && $valeur !== '' && $valeur !== false) {
+            $nutrition[$libelle] = wc_format_localized_decimal($valeur) . ' ' . $unite;
+        }
+    }
+
+    if (!$composition && empty($allergenes) && empty($nutrition)) {
+        return;
+    }
+    ?>
+    <div class="infos-produit">
+        <?php if ($composition) : ?>
+            <h2 class="infos-produit__titre">Composition</h2>
+            <p class="infos-produit__texte"><?php echo nl2br(esc_html($composition)); ?></p>
+        <?php endif; ?>
+
+        <?php if (!empty($allergenes)) : ?>
+            <h2 class="infos-produit__titre">Allergènes</h2>
+            <ul class="infos-produit__allergenes">
+                <?php foreach ((array) $allergenes as $allergene) : ?>
+                    <li><?php echo esc_html($allergene); ?></li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+
+        <?php if (!empty($nutrition)) : ?>
+            <h2 class="infos-produit__titre">Valeurs nutritionnelles<?php echo $base ? ' – ' . esc_html($base) : ''; ?></h2>
+            <table class="infos-produit__nutrition">
+                <?php foreach ($nutrition as $libelle => $valeur) : ?>
+                    <tr>
+                        <th scope="row"><?php echo esc_html($libelle); ?></th>
+                        <td><?php echo esc_html($valeur); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        <?php endif; ?>
+    </div>
+    <?php
+}, 22);
+/* Fin du bloc US-4 */
