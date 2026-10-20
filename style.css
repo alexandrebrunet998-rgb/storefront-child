@@ -1476,3 +1476,9 @@ body.woocommerce-account .woocommerce-MyAccount-navigation ul li.woocommerce-MyA
     padding-left: 1rem !important;
 }
 /* Fin du correctif renforcé US-7 */
+
+/* Espace client > Commandes : de l'air entre les boutons « Voir » et « Annuler » */
+.woocommerce-account .woocommerce-MyAccount-content .woocommerce-orders-table__cell-order-actions .button {
+    margin: 0 0.5rem 0.5rem 0;
+}
+/* Fin du correctif US-9 */

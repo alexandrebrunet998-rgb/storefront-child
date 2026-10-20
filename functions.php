@@ -665,7 +665,7 @@ add_action('woocommerce_email_before_order_table', function ($commande, $envoye_
         return;
     }
 
-    $emails_concernes = ['customer_on_hold_order', 'customer_processing_order', 'customer_completed_order'];
+    $emails_concernes = ['customer_on_hold_order', 'customer_processing_order'];
 
     if (!$email || !in_array($email->id, $emails_concernes, true)) {
         return;
@@ -696,3 +696,16 @@ add_action('woocommerce_email_before_order_table', function ($commande, $envoye_
     echo '</div>';
 }, 10, 4);
 /* Fin du bloc US-8 */
+
+/* ==========================================================================
+   Commandes (US-9.3)
+   ========================================================================== */
+
+/**
+ * Le client peut annuler lui-même, depuis son espace client, une commande
+ * en attente de paiement ou en préparation (pas encore retirée ni expédiée).
+ */
+add_filter('woocommerce_valid_order_statuses_for_cancel', function ($statuts) {
+    return array_unique(array_merge($statuts, ['on-hold', 'processing']));
+});
+/* Fin du bloc US-9 */
