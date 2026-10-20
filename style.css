@@ -1482,3 +1482,112 @@ body.woocommerce-account .woocommerce-MyAccount-navigation ul li.woocommerce-MyA
     margin: 0 0.5rem 0.5rem 0;
 }
 /* Fin du correctif US-9 */
+
+/* ==========================================================
+   US-10.2 : code promo dans l'encadré récapitulatif
+   ========================================================== */
+
+/* Ancien champ sous les produits : masqué */
+.woocommerce-cart .woocommerce-cart-form td.actions .coupon {
+	display: none;
+}
+
+/* Bloc « Code promo » en haut de l'encadré */
+.woocommerce-cart .cart-collaterals .cart_totals form.feuillette-coupon {
+	margin: 0 0 1.75em;
+	padding: 0 0 1.5em;
+	border-bottom: 1px solid #1D1D1B;
+}
+.woocommerce-cart .cart-collaterals .cart_totals .feuillette-coupon__titre {
+	display: block;
+	margin: 0 0 .6em;
+	font-weight: 700;
+	color: #1D1D1B;
+}
+.woocommerce-cart .cart-collaterals .cart_totals .feuillette-coupon__ligne {
+	display: flex;
+	align-items: center;
+	gap: .75em;
+}
+
+/* Champ de saisie */
+.woocommerce-cart .cart-collaterals .cart_totals .feuillette-coupon__ligne input#feuillette-coupon-code {
+	flex: 1 1 auto;
+	min-width: 0;
+	margin: 0;
+	padding: .75em 1em;
+	background: #fff;
+	border: 1px solid #1D1D1B;
+	border-radius: 10px;
+	box-shadow: none;
+	color: #1D1D1B;
+	text-transform: uppercase;
+}
+.woocommerce-cart .cart-collaterals .cart_totals .feuillette-coupon__ligne input#feuillette-coupon-code::placeholder {
+	text-transform: none;
+	color: #636B53;
+}
+
+/* Bouton rond « OK » */
+.woocommerce-cart .cart-collaterals .cart_totals .feuillette-coupon__ligne button.feuillette-coupon__ok {
+	flex: 0 0 3.25em;
+	width: 3.25em;
+	height: 3.25em;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: #1D1D1B;
+	color: #fff;
+	font-weight: 900;
+	line-height: 1;
+	cursor: pointer;
+}
+.woocommerce-cart .cart-collaterals .cart_totals .feuillette-coupon__ligne button.feuillette-coupon__ok:hover {
+	background: #636B53;
+	color: #fff;
+}
+.woocommerce-cart .cart-collaterals .cart_totals .feuillette-coupon__ligne button.feuillette-coupon__ok:focus-visible {
+	outline: 2px solid #A98E58;
+	outline-offset: 3px;
+}
+
+/* Mention « Code appliqué » */
+.woocommerce-cart .cart-collaterals .cart_totals p.feuillette-coupon__info {
+	margin: .6em 0 0;
+	font-size: .85em;
+	color: #1D1D1B;
+}
+
+/* Lignes de remise dans le récapitulatif */
+.woocommerce-cart .cart-collaterals .cart_totals table tr.cart-discount th,
+.woocommerce-cart .cart-collaterals .cart_totals table tr.cart-discount td {
+	color: #636B53;
+	font-weight: 400;
+}
+.woocommerce-cart .cart-collaterals .cart_totals table tr.cart-discount a.woocommerce-remove-coupon {
+	display: block;
+	margin-top: .2em;
+	font-size: .8em;
+	color: #1D1D1B;
+}
+/* Fin du bloc US-10.2 */
+
+/* US-10.2 (correctif) : police du site dans le champ code promo */
+.woocommerce-cart .cart-collaterals .cart_totals .feuillette-coupon__ligne input#feuillette-coupon-code {
+	font-family: inherit;
+	font-size: 1em;
+}
+/* Fin du correctif US-10.2 */
+
+/* US-10.2 (finition) : lignes de remise sur la page Commande */
+.woocommerce-checkout .woocommerce-checkout-review-order-table tr.cart-discount th,
+.woocommerce-checkout .woocommerce-checkout-review-order-table tr.cart-discount td {
+	color: #636B53;
+	font-weight: 400;
+}
+.woocommerce-checkout .woocommerce-checkout-review-order-table tr.cart-discount a.woocommerce-remove-coupon {
+	margin-left: .4em;
+	font-size: .8em;
+	color: #1D1D1B;
+}
+/* Fin du bloc US-10.2 finition */

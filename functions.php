@@ -709,3 +709,56 @@ add_filter('woocommerce_valid_order_statuses_for_cancel', function ($statuts) {
     return array_unique(array_merge($statuts, ['on-hold', 'processing']));
 });
 /* Fin du bloc US-9 */
+
+/* ==========================================================
+ * US-10.2 : champ code promo dans l'encadré récapitulatif
+ * ========================================================== */
+
+// 1. Formulaire « Code promo » en haut de l'encadré Total panier
+add_action( 'woocommerce_before_cart_totals', 'feuillette_coupon_dans_recap' );
+function feuillette_coupon_dans_recap() {
+	if ( ! wc_coupons_enabled() ) {
+		return;
+	}
+	$codes = WC()->cart->get_applied_coupons();
+	?>
+	<form class="feuillette-coupon" action="<?php echo esc_url( wc_get_cart_url() ); ?>" method="post">
+		<label for="feuillette-coupon-code" class="feuillette-coupon__titre">Code promo</label>
+		<div class="feuillette-coupon__ligne">
+			<input type="text" name="coupon_code" id="feuillette-coupon-code" placeholder="Votre code" autocomplete="off">
+			<button type="submit" name="apply_coupon" value="1" class="feuillette-coupon__ok">OK</button>
+		</div>
+		<?php if ( $codes ) : ?>
+			<p class="feuillette-coupon__info">Code appliqué : <?php echo esc_html( strtoupper( implode( ', ', $codes ) ) ); ?></p>
+		<?php endif; ?>
+		<?php wp_nonce_field( 'woocommerce-cart', 'woocommerce-cart-nonce', false ); ?>
+	</form>
+	<?php
+}
+
+// 2. Libellé de la ligne de remise : « Code CAPPU20 »
+add_filter( 'woocommerce_cart_totals_coupon_label', 'feuillette_libelle_coupon', 10, 2 );
+function feuillette_libelle_coupon( $label, $coupon ) {
+	return 'Code ' . strtoupper( $coupon->get_code() );
+}
+
+// 3. Lien de retrait : « Retirer » au lieu de « [Enlever] »
+add_filter( 'woocommerce_cart_totals_coupon_html', 'feuillette_lien_retirer_coupon' );
+function feuillette_lien_retirer_coupon( $html ) {
+	return str_replace( __( '[Remove]', 'woocommerce' ), 'Retirer', $html );
+}
+/* Fin du bloc US-10.2 */
+
+/* ==========================================================
+ * US-10.2 (finition) : codes utilisés affichés dans la ligne Remise
+ * (e-mails, page de confirmation, Mon compte)
+ * ========================================================== */
+add_filter( 'woocommerce_get_order_item_totals', 'feuillette_remise_avec_codes', 10, 2 );
+function feuillette_remise_avec_codes( $lignes, $order ) {
+	$codes = $order->get_coupon_codes();
+	if ( isset( $lignes['discount'] ) && $codes ) {
+		$lignes['discount']['label'] = 'Remise (' . esc_html( strtoupper( implode( ', ', $codes ) ) ) . ') :';
+	}
+	return $lignes;
+}
+/* Fin du bloc US-10.2 finition */
