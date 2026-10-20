@@ -1591,3 +1591,228 @@ body.woocommerce-account .woocommerce-MyAccount-navigation ul li.woocommerce-MyA
 	color: #1D1D1B;
 }
 /* Fin du bloc US-10.2 finition */
+
+/* ==========================================================
+   US-11.4 : pages Équipe — partie 1 (commun + liste)
+   ========================================================== */
+
+/* Fil d'Ariane « Accueil / Équipe » */
+.site-main.equipe .equipe-fil { margin: 2.5em 0 2em; font-size: .85em; }
+.site-main.equipe .equipe-fil a:first-of-type::before { display: none; }
+.site-main.equipe .equipe-fil__sep { margin: 0 .6em; }
+
+/* Boutons arrondis */
+.site-main.equipe .equipe-bouton {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: .85em 1.6em;
+	border: 1.5px solid #1D1D1B;
+	border-radius: 999px;
+	font-size: .8em;
+	font-weight: 700;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+	text-decoration: none;
+	transition: background-color .2s, color .2s;
+}
+.site-main.equipe .equipe-bouton--contour { background: transparent; color: #1D1D1B; }
+.site-main.equipe .equipe-bouton--contour:hover { background: #1D1D1B; color: #fff; }
+.site-main.equipe .equipe-bouton--plein { background: #1D1D1B; color: #fff; }
+.site-main.equipe .equipe-bouton--plein:hover { background: #636B53; border-color: #636B53; color: #fff; }
+.site-main.equipe .equipe-bouton:focus-visible { outline: 2px solid #A98E58; outline-offset: 3px; }
+
+/* Bandeau vert pleine largeur */
+body.post-type-archive-membre .site-header { margin-bottom: 0; }
+.site-main.equipe .equipe-bandeau {
+	margin: 0 calc(50% - 50vw);
+	padding: 4.5em 1.5em 3.5em;
+	background: #A4B08B;
+	text-align: center;
+}
+.site-main.equipe .equipe-bandeau__titre {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: .8em;
+	margin: 0 0 .6em;
+	font-size: clamp(1.6rem, 4vw, 2.4rem);
+	font-weight: 900;
+	letter-spacing: .15em;
+	text-transform: uppercase;
+	color: #1D1D1B;
+}
+.site-main.equipe .equipe-bandeau__titre::before,
+.site-main.equipe .equipe-bandeau__titre::after {
+	content: "";
+	flex: 0 1 6em;
+	height: 3px;
+	border-radius: 3px;
+	background: #fff;
+}
+.site-main.equipe .equipe-bandeau__intro { max-width: 32em; margin: 0 auto; color: #1D1D1B; }
+
+/* Grille des membres */
+.site-main.equipe .equipe-grille {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	gap: 2.5em 2em;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.site-main.equipe .equipe-carte { display: flex; flex-direction: column; text-align: center; }
+.site-main.equipe .equipe-carte__photo {
+	display: block;
+	aspect-ratio: 4 / 5;
+	margin-bottom: 1.2em;
+	border-radius: 24px;
+	overflow: hidden;
+	background: #E5DBCB;
+}
+.site-main.equipe .equipe-carte:nth-child(3n+2) .equipe-carte__photo { background: #D1D9B8; }
+.site-main.equipe .equipe-carte:nth-child(3n) .equipe-carte__photo { background: #E5C9BF; }
+.site-main.equipe .equipe-carte__photo img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 0;
+	transition: transform .4s;
+}
+.site-main.equipe .equipe-carte__photo:hover img { transform: scale(1.04); }
+.site-main.equipe .equipe-carte__poste,
+.site-main.equipe .membre__poste {
+	margin: 0 0 .4em;
+	font-size: .7em;
+	font-weight: 700;
+	letter-spacing: .14em;
+	text-transform: uppercase;
+	color: #7A6538;
+}
+.site-main.equipe .equipe-carte__nom {
+	margin: 0 0 .5em;
+	font-size: 1.35em;
+	font-weight: 400;
+	text-transform: uppercase;
+}
+.site-main.equipe .equipe-carte__nom strong,
+.site-main.equipe .membre__nom strong { font-weight: 900; }
+.site-main.equipe .equipe-carte__accroche { flex-grow: 1; margin: 0 0 1.2em; font-size: .85em; }
+.site-main.equipe .equipe-carte .equipe-bouton { width: 100%; }
+
+/* Bloc « Passez nous voir » */
+body.post-type-archive-membre .site-main { margin-bottom: 0; }
+.site-main.equipe .equipe-cta {
+	margin: 4.5em calc(50% - 50vw) 0;
+	padding: 3.5em 1.5em;
+	background: #F3F0E8;
+	text-align: center;
+}
+.site-main.equipe .equipe-cta__titre {
+	margin: 0 0 .4em;
+	font-size: clamp(1.3rem, 3vw, 1.7rem);
+	font-weight: 400;
+	color: #7A6538;
+}
+.site-main.equipe .equipe-cta__titre strong { font-weight: 900; }
+.site-main.equipe .equipe-cta p { margin: 0 0 1.4em; font-size: .9em; }
+/* Fin du bloc US-11.4 partie 1 */
+
+/* ==========================================================
+   US-11.4 : pages Équipe — partie 2 (profil)
+   ========================================================== */
+body.post-type-archive-membre .content-area { margin-bottom: 0; }
+
+.site-main.equipe .membre {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	gap: 3.5em;
+	align-items: start;
+}
+.site-main.equipe .membre__photo {
+	aspect-ratio: 4 / 5;
+	border-radius: 28px;
+	overflow: hidden;
+	background: #E5DBCB;
+}
+.site-main.equipe .membre__photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
+.site-main.equipe .membre__texte { padding-top: .5em; }
+.site-main.equipe .membre__nom {
+	margin: 0 0 .7em;
+	font-size: clamp(2rem, 4vw, 2.9rem);
+	font-weight: 400;
+	line-height: 1.1;
+	text-transform: uppercase;
+}
+.site-main.equipe .membre__presentation p { margin-bottom: 1em; }
+
+/* Encadré des infos */
+.site-main.equipe .membre__infos {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1.1em 2em;
+	margin: 1.8em 0;
+	padding: 1.4em 1.6em;
+	border-radius: 18px;
+	background: #F3F0E8;
+}
+.site-main.equipe .membre__infos dt {
+	margin: 0 0 .25em;
+	font-size: .7em;
+	font-weight: 700;
+	letter-spacing: .12em;
+	text-transform: uppercase;
+	color: #7A6538;
+}
+.site-main.equipe .membre__infos dd { margin: 0; }
+.site-main.equipe .membre__infos dd a { color: #1D1D1B; text-decoration: underline; }
+.site-main.equipe .membre__actions { display: flex; flex-wrap: wrap; gap: .8em; }
+
+/* Ses collègues */
+.site-main.equipe .collegues { margin: 5em 0 4em; text-align: center; }
+.site-main.equipe .collegues__titre {
+	margin: 0 0 1.2em;
+	font-size: clamp(1.5rem, 3vw, 1.9rem);
+	font-weight: 900;
+	color: #A98E58;
+}
+.site-main.equipe .collegues__liste {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	gap: 1.2em;
+	max-width: 44em;
+	margin: 0 auto;
+	padding: 0;
+	list-style: none;
+}
+.site-main.equipe .collegue {
+	display: flex;
+	align-items: center;
+	gap: 1.1em;
+	padding: .9em;
+	border-radius: 20px;
+	background: #F3F0E8;
+	color: #1D1D1B;
+	text-align: left;
+	text-decoration: none;
+	transition: background-color .2s;
+}
+.site-main.equipe .collegue:hover { background: #E5DBCB; }
+.site-main.equipe .collegue:focus-visible { outline: 2px solid #A98E58; outline-offset: 3px; }
+.site-main.equipe .collegue__photo {
+	flex: 0 0 84px;
+	height: 84px;
+	border-radius: 14px;
+	overflow: hidden;
+	background: #D1D9B8;
+}
+.site-main.equipe .collegue__photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
+.site-main.equipe .collegue__nom { display: block; font-weight: 700; }
+.site-main.equipe .collegue__poste { display: block; font-size: .8em; }
+
+/* Mobile : profil sur une colonne */
+@media (max-width: 768px) {
+	.site-main.equipe .membre { grid-template-columns: 1fr; gap: 2em; }
+	.site-main.equipe .membre__infos { grid-template-columns: 1fr; }
+}
+/* Fin du bloc US-11.4 partie 2 */

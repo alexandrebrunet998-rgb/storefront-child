@@ -189,9 +189,10 @@ add_action('storefront_footer', function () {
             ?>
         </nav>
 
-        <nav class="footer-feuillette__colonne" aria-label="Espace client">
+        <nav class="footer-feuillette__colonne" aria-label="Liens utiles">
             <?php
             feuillette_liste_liens([
+                'Notre équipe'  => get_post_type_archive_link('membre'),
                 'Mon compte'    => wc_get_page_permalink('myaccount'),
                 'Mes commandes' => wc_get_account_endpoint_url('orders'),
             ]);
@@ -762,3 +763,116 @@ function feuillette_remise_avec_codes( $lignes, $order ) {
 	return $lignes;
 }
 /* Fin du bloc US-10.2 finition */
+
+/* ==========================================================
+ * US-11.1 : type de contenu « Membre de l'équipe »
+ * Liste : /equipe/  —  Profil : /equipe/prenom-nom/
+ * ========================================================== */
+add_action( 'init', 'feuillette_type_membre' );
+function feuillette_type_membre() {
+	register_post_type( 'membre', array(
+		'labels' => array(
+			'name'                  => 'Équipe',
+			'singular_name'         => 'Membre',
+			'menu_name'             => 'Équipe',
+			'all_items'             => 'Tous les membres',
+			'add_new'               => 'Ajouter un membre',
+			'add_new_item'          => 'Ajouter un membre de l’équipe',
+			'edit_item'             => 'Modifier le membre',
+			'new_item'              => 'Nouveau membre',
+			'view_item'             => 'Voir le profil',
+			'search_items'          => 'Rechercher un membre',
+			'not_found'             => 'Aucun membre trouvé',
+			'not_found_in_trash'    => 'Aucun membre dans la corbeille',
+			'featured_image'        => 'Portrait',
+			'set_featured_image'    => 'Choisir le portrait',
+			'remove_featured_image' => 'Retirer le portrait',
+			'use_featured_image'    => 'Utiliser comme portrait',
+			'archives'              => 'Notre équipe',
+		),
+		'public'        => true,
+		'has_archive'   => 'equipe',
+		'rewrite'       => array( 'slug' => 'equipe', 'with_front' => false ),
+		'menu_icon'     => 'dashicons-groups',
+		'menu_position' => 21,
+		'supports'      => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
+		'show_in_rest'  => true,
+	) );
+}
+
+// Texte d'aide dans le champ titre : « Prénom Nom »
+add_filter( 'enter_title_here', 'feuillette_titre_membre', 10, 2 );
+function feuillette_titre_membre( $texte, $post ) {
+	return ( 'membre' === $post->post_type ) ? 'Prénom Nom' : $texte;
+}
+/* Fin du bloc US-11.1 */
+
+/* ==========================================================
+ * US-11.3 : réglages communs aux pages Équipe
+ * ========================================================== */
+
+// Pleine largeur (pas de barre latérale) sur la liste et les profils
+add_filter( 'body_class', 'feuillette_equipe_pleine_largeur' );
+function feuillette_equipe_pleine_largeur( $classes ) {
+	if ( is_post_type_archive( 'membre' ) || is_singular( 'membre' ) ) {
+		$classes[] = 'storefront-full-width-content';
+		$classes   = array_diff( $classes, array( 'right-sidebar', 'left-sidebar' ) );
+	}
+	return $classes;
+}
+
+// Fil d'Ariane retiré du haut de page : les templates le placent eux-mêmes
+add_action( 'wp', 'feuillette_equipe_retirer_fil' );
+function feuillette_equipe_retirer_fil() {
+	if ( is_post_type_archive( 'membre' ) || is_singular( 'membre' ) ) {
+		remove_action( 'storefront_before_content', 'woocommerce_breadcrumb', 10 );
+		remove_action( 'storefront_content_top', 'woocommerce_breadcrumb', 10 );
+	}
+}
+
+// Fil d'Ariane des pages Équipe (séparateur « / » comme la maquette)
+function feuillette_equipe_afficher_fil() {
+	woocommerce_breadcrumb( array(
+		'delimiter'   => '<span class="equipe-fil__sep" aria-hidden="true">/</span>',
+		'wrap_before' => '<nav class="woocommerce-breadcrumb equipe-fil" aria-label="Fil d’Ariane">',
+		'wrap_after'  => '</nav>',
+	) );
+}
+
+// Nom du membre : « Claire <strong>Martin</strong> »
+function feuillette_nom_membre( $post_id = null ) {
+	$titre  = get_the_title( $post_id );
+	$parties = explode( ' ', $titre, 2 );
+	if ( count( $parties ) < 2 ) {
+		return esc_html( $titre );
+	}
+	return esc_html( $parties[0] ) . ' <strong>' . esc_html( $parties[1] ) . '</strong>';
+}
+/* Fin du bloc US-11.3 reglages */
+
+/* ==========================================================
+ * US-11.5 : accès à l'équipe (fil d'Ariane et menu)
+ * ========================================================== */
+
+// Fil d'Ariane : « Équipe » au lieu de « Membre »
+add_filter( 'woocommerce_get_breadcrumb', 'feuillette_fil_equipe_libelle' );
+function feuillette_fil_equipe_libelle( $crumbs ) {
+	$lien = get_post_type_archive_link( 'membre' );
+	foreach ( $crumbs as $i => $crumb ) {
+		if ( isset( $crumb[1] ) && $crumb[1] === $lien ) {
+			$crumbs[ $i ][0] = 'Équipe';
+		}
+	}
+	return $crumbs;
+}
+
+// Lien « Notre équipe » allumé sur la liste et sur chaque profil
+add_filter( 'nav_menu_css_class', 'feuillette_menu_equipe_actif', 10, 2 );
+function feuillette_menu_equipe_actif( $classes, $item ) {
+	if ( ( is_post_type_archive( 'membre' ) || is_singular( 'membre' ) )
+		&& untrailingslashit( $item->url ) === untrailingslashit( get_post_type_archive_link( 'membre' ) ) ) {
+		$classes[] = 'current-menu-item';
+	}
+	return $classes;
+}
+/* Fin du bloc US-11.5 */
