@@ -628,3 +628,71 @@ add_filter('woocommerce_account_menu_items', function ($onglets) {
     return $onglets;
 });
 /* Fin du bloc US-7 */
+
+/* ==========================================================================
+   E-mails transactionnels (US-8.2 / US-8.3)
+   ========================================================================== */
+
+/**
+ * Couleurs de l'enseigne dans les e-mails. WooCommerce « incruste » ce CSS
+ * dans chaque balise (les messageries ignorent souvent les feuilles de style).
+ * Les e-mails ne chargent pas la police Arena Uno : on utilise Arial.
+ */
+add_filter('woocommerce_email_styles', function ($css) {
+    return $css . '
+        #wrapper { background-color: #F3F0E8; }
+        #template_container { border: 1px solid #1D1D1B; border-radius: 8px; box-shadow: none; }
+        #template_header { background-color: #1D1D1B; border-radius: 8px 8px 0 0; }
+        #template_header h1 { color: #FFFFFF; font-family: Arial, sans-serif; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; text-shadow: none; }
+        #body_content { background-color: #FFFFFF; }
+        #body_content_inner { color: #1D1D1B; font-family: Arial, sans-serif; }
+        h2 { color: #A98E58; font-family: Arial, sans-serif; font-size: 16px; text-transform: uppercase; }
+        a { color: #A98E58; }
+        #credit { color: #1D1D1B; font-family: Arial, sans-serif; }
+        .instructions-retrait-email { margin: 0 0 24px; padding: 16px 20px; border-radius: 8px; background-color: #A4B08B; color: #1D1D1B; }
+        .instructions-retrait-email h2 { margin: 0 0 8px; color: #1D1D1B; font-size: 14px; }
+        .instructions-retrait-email p { margin: 0; }
+    ';
+});
+
+/**
+ * Instructions de retrait dans les e-mails des commandes en retrait en boutique (US-8.3).
+ * Le texte est celui du champ SCF de la page Commande (itération 6) :
+ * l'administrateur ne le modifie qu'à un seul endroit.
+ */
+add_action('woocommerce_email_before_order_table', function ($commande, $envoye_admin, $texte_brut, $email) {
+    if ($envoye_admin || !function_exists('get_field')) {
+        return;
+    }
+
+    $emails_concernes = ['customer_on_hold_order', 'customer_processing_order', 'customer_completed_order'];
+
+    if (!$email || !in_array($email->id, $emails_concernes, true)) {
+        return;
+    }
+
+    $retrait = false;
+
+    foreach ($commande->get_shipping_methods() as $mode) {
+        if (in_array($mode->get_method_id(), ['free_shipping', 'local_pickup', 'pickup_location'], true)) {
+            $retrait = true;
+        }
+    }
+
+    $instructions = get_field('instructions_pour_le_retrait', wc_get_page_id('checkout'));
+
+    if (!$retrait || !$instructions) {
+        return;
+    }
+
+    if ($texte_brut) {
+        echo "\nINSTRUCTIONS POUR LE RETRAIT\n" . wp_strip_all_tags($instructions) . "\n\n";
+        return;
+    }
+
+    echo '<div class="instructions-retrait-email">';
+    echo '<h2>Instructions pour le retrait</h2>';
+    echo '<p>' . nl2br(esc_html($instructions)) . '</p>';
+    echo '</div>';
+}, 10, 4);
+/* Fin du bloc US-8 */
