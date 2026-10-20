@@ -1816,3 +1816,94 @@ body.post-type-archive-membre .content-area { margin-bottom: 0; }
 	.site-main.equipe .membre__infos { grid-template-columns: 1fr; }
 }
 /* Fin du bloc US-11.4 partie 2 */
+
+/* ==========================================================
+   US-12.3 : bandeau vert des pages Collection
+   ========================================================== */
+body.tax-collection .site-main .woocommerce-products-header {
+	margin: 0 calc(50% - 50vw) 3em;
+	padding: 3.5em 1.5em 3em;
+	background: #A4B08B;
+	text-align: center;
+}
+body.tax-collection .site-main .woocommerce-products-header__title.page-title {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: .8em;
+	margin: 0 0 .5em;
+	font-size: clamp(1.6rem, 4vw, 2.4rem);
+	font-weight: 900;
+	letter-spacing: .15em;
+	text-transform: uppercase;
+	color: #1D1D1B;
+}
+body.tax-collection .site-main .woocommerce-products-header__title.page-title::before,
+body.tax-collection .site-main .woocommerce-products-header__title.page-title::after {
+	content: "";
+	flex: 0 1 6em;
+	height: 3px;
+	border-radius: 3px;
+	background: #fff;
+}
+body.tax-collection .site-main .woocommerce-products-header .term-description {
+	max-width: 34em;
+	margin: 0 auto;
+	color: #1D1D1B;
+}
+body.tax-collection .site-main .woocommerce-products-header .term-description p:last-child {
+	margin-bottom: 0;
+}
+/* Fin du bloc US-12.3 bandeau */
+
+/* US-12.3 : bandeau collé au header et fil d'Ariane dessous */
+body.tax-collection .site-header { margin-bottom: 0; }
+body.tax-collection .site-main .woocommerce-products-header { margin-bottom: 0; }
+body.tax-collection .site-main .equipe-fil { margin: 2.5em 0 1.5em; font-size: .85em; }
+body.tax-collection .site-main .equipe-fil a:first-of-type::before { display: none; }
+body.tax-collection .site-main .equipe-fil__sep { margin: 0 .6em; }
+/* Fin du bloc US-12.3 fil CSS */
+
+/* US-12.3 : bloc « Nos collections » */
+.collections-bloc { padding: 3.5em 0 4em; text-align: center; }
+.collections-bloc .collections-bloc__titre {
+	margin: 0 0 .2em;
+	font-size: clamp(1.4rem, 3vw, 1.8rem);
+	font-weight: 900;
+	color: #A98E58;
+}
+.collections-bloc .collections-bloc__texte { margin: 0 0 1.8em; font-size: 1.1em; }
+.collections-bloc .collections-bloc__liste {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 1em;
+	max-width: 56em;
+	margin: 0 auto;
+	padding: 0;
+	list-style: none;
+}
+.collections-bloc .collections-bloc__lien {
+	display: block;
+	padding: 1em;
+	border: 1.5px solid #A98E58;
+	border-radius: 10px;
+	background: #fff;
+	color: #1D1D1B;
+	font-weight: 700;
+	text-decoration: none;
+	transition: background-color .2s, color .2s, border-color .2s;
+}
+.collections-bloc .collections-bloc__lien:hover,
+.collections-bloc .collections-bloc__lien.is-active {
+	background: #1D1D1B;
+	border-color: #1D1D1B;
+	color: #fff;
+}
+.collections-bloc .collections-bloc__lien:focus-visible { outline: 2px solid #A98E58; outline-offset: 3px; }
+/* Fin du bloc US-12.3 collections CSS */
+
+/* US-12.3 (finition) : espace réduit entre la grille et « Nos collections » */
+body.tax-collection .site-main,
+body.tax-collection .content-area { margin-bottom: 0; }
+.collections-bloc { padding-top: 2em; }
+/* Fin du bloc US-12.3 finition */

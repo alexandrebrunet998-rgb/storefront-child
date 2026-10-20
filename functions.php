@@ -876,3 +876,89 @@ function feuillette_menu_equipe_actif( $classes, $item ) {
 	return $classes;
 }
 /* Fin du bloc US-11.5 */
+
+/* ==========================================================
+ * US-12.1 : taxonomie « Collection » pour les produits
+ * Indépendante des catégories. Pages : /collection/nom-de-la-collection/
+ * ========================================================== */
+add_action( 'init', 'feuillette_taxonomie_collection' );
+function feuillette_taxonomie_collection() {
+	register_taxonomy( 'collection', array( 'product' ), array(
+		'labels' => array(
+			'name'          => 'Collections',
+			'singular_name' => 'Collection',
+			'menu_name'     => 'Collections',
+			'all_items'     => 'Toutes les collections',
+			'edit_item'     => 'Modifier la collection',
+			'view_item'     => 'Voir la collection',
+			'update_item'   => 'Mettre à jour la collection',
+			'add_new_item'  => 'Ajouter une collection',
+			'new_item_name' => 'Nom de la nouvelle collection',
+			'search_items'  => 'Rechercher une collection',
+			'not_found'     => 'Aucune collection trouvée',
+			'back_to_items' => '← Retour aux collections',
+		),
+		'hierarchical'      => true,
+		'public'            => true,
+		'show_admin_column' => true,
+		'show_in_rest'      => true,
+		'rewrite'           => array( 'slug' => 'collection', 'with_front' => false ),
+	) );
+}
+/* Fin du bloc US-12.1 */
+
+/* US-12.1 (finition) : colonne « Collections » lisible dans la liste des produits */
+add_action( 'admin_head', 'feuillette_admin_colonne_collections' );
+function feuillette_admin_colonne_collections() {
+	echo '<style>.wp-list-table .column-taxonomy-collection { width: 11%; }</style>';
+}
+/* Fin du bloc US-12.1 finition */
+
+/* US-12.3 : pages Collection, fil d'Ariane sous le bandeau (comme la page Équipe) */
+add_action( 'wp', 'feuillette_collection_fil_sous_bandeau' );
+function feuillette_collection_fil_sous_bandeau() {
+	if ( is_tax( 'collection' ) ) {
+		remove_action( 'storefront_before_content', 'woocommerce_breadcrumb', 10 );
+		remove_action( 'storefront_content_top', 'woocommerce_breadcrumb', 10 );
+		add_action( 'woocommerce_before_shop_loop', 'feuillette_equipe_afficher_fil', 5 );
+	}
+}
+/* Fin du bloc US-12.3 fil */
+
+/* ==========================================================
+ * US-12.3 : bloc « Nos collections » (maquette : sous la grille, avant le footer)
+ * Accueil, Boutique, catégories et pages de collection
+ * ========================================================== */
+add_action( 'storefront_before_footer', 'feuillette_bloc_collections', 5 );
+function feuillette_bloc_collections() {
+	if ( ! ( feuillette_est_page_offres() || is_tax( 'collection' ) ) ) {
+		return;
+	}
+	$collections = get_terms( array(
+		'taxonomy'   => 'collection',
+		'hide_empty' => true,
+		'orderby'    => 'term_id',
+	) );
+	if ( empty( $collections ) || is_wp_error( $collections ) ) {
+		return;
+	}
+	?>
+	<section class="collections-bloc" aria-labelledby="collections-bloc-titre">
+		<div class="col-full">
+			<h2 id="collections-bloc-titre" class="collections-bloc__titre">Nos collections</h2>
+			<p class="collections-bloc__texte">Parcourez la carte autrement</p>
+			<ul class="collections-bloc__liste">
+				<?php foreach ( $collections as $collection ) :
+					$active = is_tax( 'collection', $collection->term_id ); ?>
+					<li>
+						<a class="collections-bloc__lien<?php echo $active ? ' is-active' : ''; ?>"
+						   href="<?php echo esc_url( get_term_link( $collection ) ); ?>"
+						   <?php echo $active ? 'aria-current="page"' : ''; ?>><?php echo esc_html( $collection->name ); ?></a>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+		</div>
+	</section>
+	<?php
+}
+/* Fin du bloc US-12.3 collections */
