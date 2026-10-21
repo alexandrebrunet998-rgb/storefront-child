@@ -1064,3 +1064,95 @@ function feuillette_formulaire_avis( $args ) {
 	return $args;
 }
 /* Fin du bloc US-14.1 */
+
+/* ==========================================================
+ * US-15.1 : réglages des frais de préparation
+ * WooCommerce → Réglages → Général, section « Frais de préparation »
+ * ========================================================== */
+add_filter( 'woocommerce_general_settings', 'feuillette_reglages_frais' );
+function feuillette_reglages_frais( $reglages ) {
+	$reglages[] = array(
+		'title' => 'Frais de préparation',
+		'type'  => 'title',
+		'desc'  => 'Frais fixes ajoutés automatiquement aux petites commandes.',
+		'id'    => 'feuillette_frais_section',
+	);
+	$reglages[] = array(
+		'title'   => 'Activer',
+		'desc'    => 'Appliquer des frais de préparation sous le seuil',
+		'id'      => 'feuillette_frais_actif',
+		'type'    => 'checkbox',
+		'default' => 'yes',
+	);
+	$reglages[] = array(
+		'title'             => 'Montant des frais (€)',
+		'id'                => 'feuillette_frais_montant',
+		'type'              => 'number',
+		'default'           => '1',
+		'custom_attributes' => array( 'min' => '0', 'step' => '0.01' ),
+	);
+	$reglages[] = array(
+		'title'             => 'Seuil du panier (€)',
+		'desc'              => 'Les frais s’appliquent si le panier (après codes promo) est inférieur à ce montant.',
+		'id'                => 'feuillette_frais_seuil',
+		'type'              => 'number',
+		'default'           => '10',
+		'custom_attributes' => array( 'min' => '0', 'step' => '0.01' ),
+	);
+	$reglages[] = array( 'type' => 'sectionend', 'id' => 'feuillette_frais_section' );
+	return $reglages;
+}
+
+// Lecture des réglages (utilisée par le calcul et par le message)
+function feuillette_frais_reglages() {
+	return array(
+		'actif'   => 'yes' === get_option( 'feuillette_frais_actif', 'yes' ),
+		'montant' => (float) wc_format_decimal( get_option( 'feuillette_frais_montant', 1 ) ),
+		'seuil'   => (float) wc_format_decimal( get_option( 'feuillette_frais_seuil', 10 ) ),
+	);
+}
+/* Fin du bloc US-15.1 */
+
+/* ==========================================================
+ * US-15.2 : frais de préparation dans le calcul du panier
+ * US-15.3 : message « Plus que X € » dans le récapitulatif
+ * ========================================================== */
+
+// Montant pris en compte : sous-total des produits, après codes promo
+function feuillette_frais_base( $cart ) {
+	return (float) $cart->get_subtotal() - (float) $cart->get_discount_total();
+}
+
+// Règle : sous le seuil, on ajoute les frais ; au-dessus, rien
+add_action( 'woocommerce_cart_calculate_fees', 'feuillette_frais_preparation' );
+function feuillette_frais_preparation( $cart ) {
+	if ( is_admin() && ! wp_doing_ajax() ) {
+		return;
+	}
+	$r = feuillette_frais_reglages();
+	if ( ! $r['actif'] || $r['montant'] <= 0 || $cart->is_empty() ) {
+		return;
+	}
+	if ( feuillette_frais_base( $cart ) < $r['seuil'] ) {
+		$cart->add_fee( 'Frais de préparation', $r['montant'], false );
+	}
+}
+
+// Message dans le récapitulatif du panier et de la page Commande
+add_action( 'woocommerce_cart_totals_before_order_total', 'feuillette_frais_message' );
+add_action( 'woocommerce_review_order_before_order_total', 'feuillette_frais_message' );
+function feuillette_frais_message() {
+	$r = feuillette_frais_reglages();
+	if ( ! $r['actif'] || $r['montant'] <= 0 || ! WC()->cart || WC()->cart->is_empty() ) {
+		return;
+	}
+	$reste = $r['seuil'] - feuillette_frais_base( WC()->cart );
+	if ( $reste <= 0 ) {
+		return;
+	}
+	printf(
+		'<tr class="frais-info"><td colspan="2">Plus que <strong>%s</strong> d’achats pour ne pas payer les frais de préparation.</td></tr>',
+		wp_kses_post( wc_price( $reste ) )
+	);
+}
+/* Fin du bloc US-15.2 */

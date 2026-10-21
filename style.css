@@ -2097,3 +2097,25 @@ body .suggestions a.suggestion__bouton { text-decoration: none; }
 .avis-section .star-rating span,
 .avis-section .star-rating span::before { color: #A98E58; }
 /* Fin du correctif étoiles US-14.1 */
+
+/* US-15.3 : message « Plus que X € » dans le récapitulatif */
+.cart_totals tr.frais-info td,
+.woocommerce-checkout-review-order-table tr.frais-info td {
+	padding-top: .3em;
+	text-align: left;
+	font-size: .85em;
+	color: #636B53;
+}
+/* Fin du bloc US-15.3 */
+
+/* US-15.3 (correctif) : message aligné à gauche malgré Storefront */
+body .cart-collaterals .cart_totals table tr.frais-info td,
+body .woocommerce-checkout-review-order-table tr.frais-info td { text-align: left; }
+/* Fin du correctif US-15.3 */
+
+/* IT-14 (suite) : toutes les étoiles de notation en doré (note moyenne sous le titre, etc.) */
+body .star-rating,
+body .star-rating::before,
+body .star-rating span,
+body .star-rating span::before { color: #A98E58; }
+/* Fin du correctif étoiles */
