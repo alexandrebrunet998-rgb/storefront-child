@@ -1026,3 +1026,41 @@ function feuillette_suggestions_panier() {
 	feuillette_cartes_suggestions( WC()->cart->get_cross_sells(), 'votre commande' );
 }
 /* Fin du bloc US-13 */
+
+/* ==========================================================
+ * US-14.1 : avis clients en section, sous « Pour accompagner » (maquette)
+ * ========================================================== */
+
+// 1. Plus d'onglet « Avis » : les avis ont leur propre section
+add_filter( 'woocommerce_product_tabs', 'feuillette_retirer_onglet_avis', 98 );
+function feuillette_retirer_onglet_avis( $onglets ) {
+	unset( $onglets['reviews'] );
+	return $onglets;
+}
+
+// 2. Section des avis, juste après les suggestions (priorité 5)
+add_action( 'woocommerce_after_single_product_summary', 'feuillette_section_avis', 6 );
+function feuillette_section_avis() {
+	if ( ! comments_open() && ! get_comments_number() ) {
+		return;
+	}
+	?>
+	<section class="avis-section" aria-labelledby="avis-titre">
+		<header class="avis-entete">
+			<h2 id="avis-titre" class="avis-titre"><strong>Avis</strong> clients</h2>
+			<p class="avis-intro">Les avis sont publiés par les clients ayant acheté ce produit.</p>
+		</header>
+		<?php comments_template(); ?>
+	</section>
+	<?php
+}
+
+// 3. Textes du formulaire, comme la maquette
+add_filter( 'woocommerce_product_review_comment_form_args', 'feuillette_formulaire_avis' );
+function feuillette_formulaire_avis( $args ) {
+	$args['title_reply']          = 'Laisser un avis';
+	$args['label_submit']         = 'Publier mon avis';
+	$args['comment_notes_before'] = '';
+	return $args;
+}
+/* Fin du bloc US-14.1 */

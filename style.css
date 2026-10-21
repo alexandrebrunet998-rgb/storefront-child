@@ -1981,3 +1981,119 @@ body .suggestions h3.suggestion__nom a { font-weight: 900; }
 body .suggestions a.suggestion__bouton { text-decoration: none; }
 .woocommerce-cart .suggestions ul.suggestions__liste { grid-template-columns: 1fr; }
 /* Fin du correctif US-13.2 */
+
+/* ==========================================================
+   US-14.1 : section « Avis clients » (maquette : 2 colonnes)
+   ========================================================== */
+.avis-section {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+	column-gap: 3em;
+	align-items: start;
+	clear: both;
+	margin: 3em 0;
+}
+.avis-section .avis-entete { grid-column: 1; }
+.avis-section #reviews { display: contents; }
+.avis-section #comments { grid-column: 1; }
+.avis-section #review_form_wrapper,
+.avis-section .woocommerce-verification-required { grid-column: 2; grid-row: 1 / span 2; }
+.avis-section .clear,
+.avis-section .woocommerce-Reviews-title { display: none; }
+
+/* Titre et introduction */
+.avis-section .avis-titre {
+	margin: 0 0 .4em;
+	font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+	font-weight: 400;
+	color: #A98E58;
+}
+.avis-section .avis-titre strong { font-weight: 900; }
+.avis-section .avis-intro { margin: 0 0 1.5em; font-weight: 700; }
+
+/* « Il n'y a pas encore d'avis » : simple texte, pas un bandeau */
+.avis-section p.woocommerce-noreviews {
+	padding: 0;
+	border: 0;
+	background: none;
+	color: #1D1D1B;
+	font-style: italic;
+}
+.avis-section p.woocommerce-noreviews::before { display: none; }
+
+/* Encadré de droite (formulaire ou message réservé aux acheteurs) */
+.avis-section #review_form_wrapper,
+.avis-section .woocommerce-verification-required {
+	padding: 1.5em;
+	border: 1px solid #1D1D1B;
+	border-radius: 12px;
+	background: #F3F0E8;
+}
+.avis-section #reply-title {
+	display: block;
+	margin: 0 0 1em;
+	font-size: .8em;
+	font-weight: 900;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+}
+.avis-section #review_form label { font-size: .8em; font-weight: 700; }
+.avis-section #review_form p.stars a { color: #A98E58; font-size: 1.3em; }
+.avis-section #review_form textarea {
+	width: 100%;
+	min-height: 7em;
+	padding: .8em 1em;
+	border: 1px solid #1D1D1B;
+	border-radius: 8px;
+	background: #fff;
+	box-shadow: none;
+	font-family: inherit;
+}
+.avis-section #review_form input#submit {
+	padding: .9em 2.2em;
+	border: 0;
+	border-radius: 8px;
+	background: #1D1D1B;
+	color: #fff;
+	font-size: .8em;
+	font-weight: 700;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+}
+.avis-section #review_form input#submit:hover { background: #636B53; }
+.avis-section #review_form input#submit:focus-visible,
+.avis-section #review_form textarea:focus-visible { outline: 2px solid #A98E58; outline-offset: 3px; }
+
+/* Liste des avis */
+.avis-section ol.commentlist { margin: 0; padding: 0; list-style: none; }
+.avis-section ol.commentlist li.review {
+	margin: 0 0 1em;
+	padding: 1em 1.2em;
+	border-radius: 12px;
+	background: #F3F0E8;
+}
+.avis-section .star-rating { color: #A98E58; }
+.avis-section .woocommerce-review__verified { color: #636B53; font-size: .8em; font-style: normal; }
+
+/* Mobile : une seule colonne */
+@media (max-width: 768px) {
+	.avis-section { grid-template-columns: 1fr; }
+	.avis-section #review_form_wrapper,
+	.avis-section .woocommerce-verification-required { grid-column: 1; grid-row: auto; margin-top: 1.5em; }
+}
+/* Fin du bloc US-14.1 */
+
+/* US-14.1 (correctif) : un seul cadre, étoiles dorées, texte en haut, champ moins haut, police du site */
+.avis-section { grid-template-rows: auto 1fr; }
+.avis-section #review_form #respond { margin: 0; padding: 0; border: 0; background: none; }
+.avis-section #review_form p.stars a::before { color: #A98E58; }
+.avis-section #review_form textarea { height: 6em; min-height: 0; }
+.avis-section #review_form input#submit { font-family: inherit; }
+/* Fin du correctif US-14.1 */
+
+/* US-14.1 (correctif) : étoiles des avis en doré (au lieu du violet WooCommerce) */
+.avis-section .star-rating,
+.avis-section .star-rating::before,
+.avis-section .star-rating span,
+.avis-section .star-rating span::before { color: #A98E58; }
+/* Fin du correctif étoiles US-14.1 */
