@@ -962,3 +962,67 @@ function feuillette_bloc_collections() {
 	<?php
 }
 /* Fin du bloc US-12.3 collections */
+
+/* ==========================================================
+ * US-13.2 / US-13.3 : suggestions « Pour accompagner » (ventes croisées)
+ * ========================================================== */
+
+// Cartes de suggestions, partagées entre la fiche produit et le panier
+function feuillette_cartes_suggestions( $ids, $titre_suite ) {
+	$ids = array_slice( array_filter( array_map( 'absint', (array) $ids ) ), 0, 3 );
+	if ( empty( $ids ) ) {
+		return;
+	}
+	?>
+	<section class="suggestions" aria-labelledby="suggestions-titre">
+		<h2 id="suggestions-titre" class="suggestions__titre"><strong>Pour accompagner</strong> <?php echo esc_html( $titre_suite ); ?></h2>
+		<ul class="suggestions__liste">
+			<?php foreach ( $ids as $id ) :
+				$produit = wc_get_product( $id );
+				if ( ! $produit || ! $produit->is_visible() ) {
+					continue;
+				}
+				$simple = $produit->is_type( 'simple' ) && $produit->is_purchasable() && $produit->is_in_stock();
+				$prix   = $produit->is_type( 'variable' )
+					? 'dès ' . wc_price( $produit->get_variation_price( 'min', true ) )
+					: wc_price( wc_get_price_to_display( $produit ) );
+				?>
+				<li class="suggestion">
+					<a class="suggestion__photo" href="<?php echo esc_url( $produit->get_permalink() ); ?>" tabindex="-1" aria-hidden="true">
+						<?php echo $produit->get_image( 'woocommerce_thumbnail', array( 'alt' => '' ) ); ?>
+					</a>
+					<div class="suggestion__texte">
+						<h3 class="suggestion__nom"><a href="<?php echo esc_url( $produit->get_permalink() ); ?>"><?php echo esc_html( $produit->get_name() ); ?></a></h3>
+						<p class="suggestion__prix"><?php echo wp_kses_post( $prix ); ?></p>
+						<a class="suggestion__bouton"
+						   href="<?php echo esc_url( $simple ? $produit->add_to_cart_url() : $produit->get_permalink() ); ?>"
+						   aria-label="<?php echo esc_attr( ( $simple ? 'Ajouter au panier : ' : 'Personnaliser : ' ) . $produit->get_name() ); ?>"><?php echo $simple ? 'Ajouter' : 'Personnaliser'; ?></a>
+					</div>
+				</li>
+			<?php endforeach; ?>
+		</ul>
+	</section>
+	<?php
+}
+/* Fin du morceau 1 US-13 */
+
+// Fiche produit : avant les onglets et les avis, comme la maquette
+add_action( 'woocommerce_after_single_product_summary', 'feuillette_suggestions_fiche', 5 );
+function feuillette_suggestions_fiche() {
+	global $product;
+	if ( ! $product ) {
+		return;
+	}
+	$suite = has_term( 'viennoiserie', 'product_cat', $product->get_id() ) ? 'votre viennoiserie' : 'votre boisson';
+	feuillette_cartes_suggestions( $product->get_cross_sell_ids(), $suite );
+}
+
+// Panier : nos cartes sous la liste des produits, à la place de l'affichage par défaut
+add_action( 'init', function () {
+	remove_action( 'woocommerce_cart_collaterals', 'woocommerce_cross_sell_display' );
+} );
+add_action( 'woocommerce_after_cart_table', 'feuillette_suggestions_panier' );
+function feuillette_suggestions_panier() {
+	feuillette_cartes_suggestions( WC()->cart->get_cross_sells(), 'votre commande' );
+}
+/* Fin du bloc US-13 */

@@ -1907,3 +1907,77 @@ body.tax-collection .site-main,
 body.tax-collection .content-area { margin-bottom: 0; }
 .collections-bloc { padding-top: 2em; }
 /* Fin du bloc US-12.3 finition */
+
+/* ==========================================================
+   US-13.2 : suggestions « Pour accompagner » (fiche produit et panier)
+   ========================================================== */
+.suggestions { clear: both; margin: 3em 0; }
+.suggestions .suggestions__titre {
+	margin: 0 0 1em;
+	font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+	font-weight: 400;
+	color: #A98E58;
+}
+.suggestions .suggestions__titre strong { font-weight: 900; }
+.suggestions ul.suggestions__liste {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	gap: 1.2em;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.suggestions .suggestion {
+	display: flex;
+	align-items: center;
+	gap: 1em;
+	margin: 0;
+	padding: .8em;
+	border-radius: 14px;
+	background: #F3F0E8;
+}
+.suggestions .suggestion__photo {
+	flex: 0 0 88px;
+	width: 88px;
+	height: 88px;
+	border-radius: 10px;
+	overflow: hidden;
+}
+.suggestions .suggestion__photo img { width: 100%; height: 100%; margin: 0; object-fit: cover; border-radius: 0; }
+.suggestions .suggestion__texte { min-width: 0; }
+.suggestions .suggestion__nom {
+	margin: 0 0 .2em;
+	font-size: .85em;
+	font-weight: 900;
+	letter-spacing: .04em;
+	line-height: 1.3;
+	text-transform: uppercase;
+}
+.suggestions .suggestion__nom a { color: #1D1D1B; text-decoration: none; }
+.suggestions .suggestion__nom a:hover { text-decoration: underline; }
+.suggestions .suggestion__prix { margin: 0 0 .6em; font-size: .8em; font-weight: 700; }
+.suggestions .suggestion__bouton {
+	display: inline-block;
+	padding: .55em 1.2em;
+	border: 1.5px solid #1D1D1B;
+	border-radius: 8px;
+	background: #fff;
+	color: #1D1D1B;
+	font-size: .7em;
+	font-weight: 700;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+	text-decoration: none;
+	transition: background-color .2s, color .2s;
+}
+.suggestions .suggestion__bouton:hover { background: #1D1D1B; color: #fff; }
+.suggestions .suggestion__bouton:focus-visible,
+.suggestions .suggestion__nom a:focus-visible { outline: 2px solid #A98E58; outline-offset: 3px; }
+/* Fin du bloc US-13.2 */
+
+/* US-13.2 (correctif) : noms en gras, boutons non soulignés, panier en une colonne */
+body .suggestions h3.suggestion__nom,
+body .suggestions h3.suggestion__nom a { font-weight: 900; }
+body .suggestions a.suggestion__bouton { text-decoration: none; }
+.woocommerce-cart .suggestions ul.suggestions__liste { grid-template-columns: 1fr; }
+/* Fin du correctif US-13.2 */
