@@ -2119,3 +2119,61 @@ body .star-rating::before,
 body .star-rating span,
 body .star-rating span::before { color: #A98E58; }
 /* Fin du correctif étoiles */
+
+/* ==========================================================
+   US-16.2 : section « Nouveautés » de l'accueil
+   ========================================================== */
+.nouveautes { padding-top: 3.5em; padding-bottom: 1em; text-align: center; }
+.nouveautes .nouveautes__titre {
+	margin: 0 0 .3em;
+	font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+	font-weight: 400;
+	color: #A98E58;
+}
+.nouveautes .nouveautes__titre strong { font-weight: 900; }
+.nouveautes .nouveautes__texte { margin: 0 0 2em; }
+
+/* Grille de 3 cartes, comme la Boutique */
+.nouveautes ul.products {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 2em;
+	margin: 0;
+	padding: 0;
+}
+.nouveautes ul.products::before,
+.nouveautes ul.products::after { display: none; }
+.nouveautes ul.products li.product {
+	position: relative;
+	float: none;
+	width: auto;
+	margin: 0;
+}
+.nouveautes ul.products li.product img {
+	aspect-ratio: 4 / 5;
+	width: 100%;
+	object-fit: cover;
+}
+
+/* Pastille « Nouveau » sur la photo */
+.nouveautes ul.products li.product::before {
+	content: "Nouveau";
+	position: absolute;
+	top: 1em;
+	left: 1em;
+	z-index: 2;
+	padding: .4em .9em;
+	border-radius: 999px;
+	background: #1D1D1B;
+	color: #fff;
+	font-size: .7em;
+	font-weight: 700;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+}
+
+/* Mobile : une carte par ligne */
+@media (max-width: 768px) {
+	.nouveautes ul.products { grid-template-columns: 1fr; }
+}
+/* Fin du bloc US-16.2 */

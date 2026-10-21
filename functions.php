@@ -332,6 +332,8 @@ add_action('storefront_before_content', function () {
             </p>
         </div>
 
+        <?php do_action( 'feuillette_apres_bandeau' ); ?>
+
         <div class="offres__intro col-full">
             <h2 class="offres__title"><strong>Nos offres</strong> pour vos pauses déjeuner</h2>
             <p class="offres__text">Composez votre commande, personnalisez chaque produit, puis passez la récupérer sans attendre.</p>
@@ -1156,3 +1158,33 @@ function feuillette_frais_message() {
 	);
 }
 /* Fin du bloc US-15.2 */
+
+/* ==========================================================
+ * US-16.1 / US-16.2 : les 3 derniers produits ajoutés, sur l'accueil
+ * Affichés sous le bandeau vert (point d'accroche feuillette_apres_bandeau)
+ * ========================================================== */
+add_action( 'feuillette_apres_bandeau', 'feuillette_nouveautes' );
+function feuillette_nouveautes() {
+	if ( ! is_front_page() ) {
+		return;
+	}
+	$ids = wc_get_products( array(
+		'status'     => 'publish',
+		'visibility' => 'visible',
+		'limit'      => 3,
+		'orderby'    => 'date',
+		'order'      => 'DESC',
+		'return'     => 'ids',
+	) );
+	if ( empty( $ids ) ) {
+		return;
+	}
+	?>
+	<section class="nouveautes col-full" aria-labelledby="nouveautes-titre">
+		<h2 id="nouveautes-titre" class="nouveautes__titre"><strong>Nouveautés</strong> à la carte</h2>
+		<p class="nouveautes__texte">Les derniers produits arrivés au Café Feuillette.</p>
+		<?php echo do_shortcode( '[products ids="' . esc_attr( implode( ',', $ids ) ) . '" orderby="post__in" columns="3"]' ); ?>
+	</section>
+	<?php
+}
+/* Fin du bloc US-16 */
