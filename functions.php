@@ -1305,3 +1305,140 @@ function feuillette_ligne_poids() {
 	);
 }
 /* Fin du bloc US-19 */
+
+/* ==========================================================
+ * US-20 : créneaux de livraison et de retrait (page Commande)
+ * ========================================================== */
+
+// Le client a-t-il choisi le retrait en boutique ? (mode « Livraison gratuite » ou « Retrait »)
+function feuillette_est_retrait() {
+	$choisi  = WC()->session ? (array) WC()->session->get( 'chosen_shipping_methods' ) : array();
+	$methode = isset( $choisi[0] ) ? $choisi[0] : '';
+	return 0 === strpos( $methode, 'free_shipping' ) || 0 === strpos( $methode, 'local_pickup' );
+}
+
+// Jours proposés : retrait dès aujourd'hui, livraison à partir de demain (3 jours)
+function feuillette_jours_proposes( $retrait ) {
+	$noms       = array( 'Aujourd’hui', 'Demain', 'Après-demain' );
+	$debut      = $retrait ? 0 : 1;
+	$jours      = array();
+	$maintenant = new DateTimeImmutable( 'now', wp_timezone() );
+	for ( $i = $debut; $i < $debut + 3; $i++ ) {
+		$jour = $maintenant->modify( '+' . $i . ' day' );
+		$jours[ $jour->format( 'Y-m-d' ) ] = isset( $noms[ $i ] ) ? $noms[ $i ] : ucfirst( wp_date( 'l j', $jour->getTimestamp() ) );
+	}
+	return $jours;
+}
+
+// Plages (clé HHMM-HHMM) : retrait par 30 min à l'heure du déjeuner (maquette), livraison en 3 plages
+function feuillette_plages_proposees( $retrait ) {
+	return $retrait
+		? array( '1130-1200' => '11:30 – 12:00', '1200-1230' => '12:00 – 12:30', '1230-1300' => '12:30 – 13:00', '1300-1330' => '13:00 – 13:30', '1330-1400' => '13:30 – 14:00' )
+		: array( '0900-1200' => '9:00 – 12:00', '1200-1400' => '12:00 – 14:00', '1400-1800' => '14:00 – 18:00' );
+}
+/* Fin du morceau 1 US-20 */
+
+// Champs « Jour » et « Plage horaire », avant le paiement (rechargés quand le mode change)
+add_action( 'woocommerce_review_order_before_payment', 'feuillette_champs_creneau' );
+function feuillette_champs_creneau() {
+	if ( ! WC()->cart || ! WC()->cart->needs_shipping() ) {
+		return;
+	}
+	$retrait = feuillette_est_retrait();
+	$valeurs = array();
+	if ( isset( $_POST['post_data'] ) ) {
+		parse_str( wp_unslash( $_POST['post_data'] ), $valeurs );
+	}
+	echo '<h3>' . ( $retrait ? 'Créneau de retrait' : 'Créneau de livraison' ) . '</h3>';
+	woocommerce_form_field( 'feuillette_jour', array(
+		'type'     => 'radio',
+		'required' => true,
+		'label'    => $retrait ? 'Jour de retrait' : 'Jour de livraison',
+		'options'  => feuillette_jours_proposes( $retrait ),
+	), isset( $valeurs['feuillette_jour'] ) ? sanitize_text_field( $valeurs['feuillette_jour'] ) : '' );
+	woocommerce_form_field( 'feuillette_plage', array(
+		'type'     => 'radio',
+		'required' => true,
+		'label'    => $retrait ? 'Heure de retrait' : 'Plage horaire de livraison',
+		'options'  => feuillette_plages_proposees( $retrait ),
+	), isset( $valeurs['feuillette_plage'] ) ? sanitize_text_field( $valeurs['feuillette_plage'] ) : '' );
+}
+
+// Validation : jour et plage obligatoires, pas de créneau déjà passé
+add_action( 'woocommerce_after_checkout_validation', 'feuillette_valider_creneau', 10, 2 );
+function feuillette_valider_creneau( $data, $erreurs ) {
+	if ( ! WC()->cart->needs_shipping() ) {
+		return;
+	}
+	$retrait = feuillette_est_retrait();
+	$jour    = isset( $_POST['feuillette_jour'] ) ? sanitize_text_field( wp_unslash( $_POST['feuillette_jour'] ) ) : '';
+	$plage   = isset( $_POST['feuillette_plage'] ) ? sanitize_text_field( wp_unslash( $_POST['feuillette_plage'] ) ) : '';
+	if ( ! array_key_exists( $jour, feuillette_jours_proposes( $retrait ) ) ) {
+		$erreurs->add( 'creneau_jour', $retrait ? 'Veuillez choisir un jour de retrait.' : 'Veuillez choisir un jour de livraison.' );
+	}
+	if ( ! array_key_exists( $plage, feuillette_plages_proposees( $retrait ) ) ) {
+		$erreurs->add( 'creneau_plage', 'Veuillez choisir une plage horaire.' );
+		return;
+	}
+	$maintenant = new DateTimeImmutable( 'now', wp_timezone() );
+	if ( $jour === $maintenant->format( 'Y-m-d' ) && (int) substr( $plage, 5, 4 ) <= (int) $maintenant->format( 'Hi' ) ) {
+		$erreurs->add( 'creneau_passe', 'Ce créneau est déjà passé : choisissez une heure plus tardive ou un autre jour.' );
+	}
+}
+/* Fin du morceau 2 US-20 */
+
+// Enregistrement du créneau avec la commande
+add_action( 'woocommerce_checkout_create_order', 'feuillette_enregistrer_creneau', 10, 2 );
+function feuillette_enregistrer_creneau( $order, $data ) {
+	if ( empty( $_POST['feuillette_jour'] ) || empty( $_POST['feuillette_plage'] ) ) {
+		return;
+	}
+	$retrait = feuillette_est_retrait();
+	$jours   = feuillette_jours_proposes( $retrait );
+	$plages  = feuillette_plages_proposees( $retrait );
+	$jour    = sanitize_text_field( wp_unslash( $_POST['feuillette_jour'] ) );
+	$plage   = sanitize_text_field( wp_unslash( $_POST['feuillette_plage'] ) );
+	if ( ! isset( $jours[ $jour ], $plages[ $plage ] ) ) {
+		return;
+	}
+	$date = wp_date( 'l j F Y', ( new DateTimeImmutable( $jour . ' 12:00', wp_timezone() ) )->getTimestamp() );
+	$order->update_meta_data( '_feuillette_creneau', ( $retrait ? 'Retrait' : 'Livraison' ) . ' le ' . $date . ', ' . $plages[ $plage ] );
+}
+
+// Affichage : fiche commande de l'admin, confirmation et Mon compte, e-mails
+add_action( 'woocommerce_admin_order_data_after_shipping_address', function ( $order ) {
+	$texte = $order->get_meta( '_feuillette_creneau' );
+	if ( $texte ) {
+		echo '<p><strong>Créneau :</strong> ' . esc_html( $texte ) . '</p>';
+	}
+} );
+add_action( 'woocommerce_order_details_after_order_table', function ( $order ) {
+	$texte = $order->get_meta( '_feuillette_creneau' );
+	if ( $texte ) {
+		echo '<h2>Créneau</h2><p>' . esc_html( $texte ) . '</p>';
+	}
+} );
+add_action( 'woocommerce_email_after_order_table', function ( $order, $sent_to_admin, $plain_text ) {
+	$texte = $order->get_meta( '_feuillette_creneau' );
+	if ( ! $texte ) {
+		return;
+	}
+	echo $plain_text ? "\nCréneau : " . $texte . "\n" : '<h2>Créneau</h2><p>' . esc_html( $texte ) . '</p>';
+}, 10, 3 );
+/* Fin du bloc US-20 */
+
+/* US-20 (correctif) : la section créneau est rechargée quand le client change de mode de réception.
+   WooCommerce ne recharge que le récapitulatif et le paiement : on lui ajoute notre zone (fragment). */
+remove_action( 'woocommerce_review_order_before_payment', 'feuillette_champs_creneau' );
+add_action( 'woocommerce_review_order_before_payment', function () {
+	echo '<div id="feuillette-creneau">';
+	feuillette_champs_creneau();
+	echo '</div>';
+} );
+add_filter( 'woocommerce_update_order_review_fragments', function ( $fragments ) {
+	ob_start();
+	feuillette_champs_creneau();
+	$fragments['#feuillette-creneau'] = '<div id="feuillette-creneau">' . ob_get_clean() . '</div>';
+	return $fragments;
+} );
+/* Fin du correctif US-20 */

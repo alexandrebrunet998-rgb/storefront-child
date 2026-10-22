@@ -2287,3 +2287,33 @@ body .star-rating span::before { color: #A98E58; }
 }
 #secondary.widget-area .widget_price_filter .price_slider_amount { text-align: left; }
 /* Fin du bloc US-18.3 */
+
+/* US-20 : jours et créneaux en boutons, comme la maquette.
+   Champs radio générés par WooCommerce : identifiants #…_field, classes input-radio et radio. */
+#feuillette_jour_field .woocommerce-input-wrapper,
+#feuillette_plage_field .woocommerce-input-wrapper { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .4rem; }
+#feuillette_jour_field input.input-radio,
+#feuillette_plage_field input.input-radio { position: absolute; opacity: 0; width: 1px; height: 1px; }
+#feuillette_jour_field label.radio,
+#feuillette_plage_field label.radio {
+	display: inline-block;
+	margin: 0;
+	padding: .7rem 1.1rem;
+	border: 1px solid #1D1D1B;
+	border-radius: 8px;
+	background: #fff;
+	color: #1D1D1B;
+	font-weight: 700;
+	font-size: .85rem;
+	cursor: pointer;
+}
+#feuillette_jour_field input.input-radio:checked + label.radio,
+#feuillette_plage_field input.input-radio:checked + label.radio { background: #1D1D1B; color: #fff; }
+#feuillette_jour_field input.input-radio:focus-visible + label.radio,
+#feuillette_plage_field input.input-radio:focus-visible + label.radio { outline: 2px solid #A98E58; outline-offset: 2px; }
+/* Fin du bloc US-20 CSS */
+
+/* US-20 : la marque « obligatoire » reste sur le titre du champ, pas dans chaque bouton */
+#feuillette_jour_field label.radio .required,
+#feuillette_plage_field label.radio .required { display: none; }
+/* Fin du correctif US-20 CSS */
