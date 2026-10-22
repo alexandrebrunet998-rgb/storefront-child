@@ -2177,3 +2177,113 @@ body .star-rating span::before { color: #A98E58; }
 	.nouveautes ul.products { grid-template-columns: 1fr; }
 }
 /* Fin du bloc US-16.2 */
+
+/* ==========================================================
+   US-18.2 : barre de filtres de la Boutique
+   Uniquement des classes de Storefront et WooCommerce
+   ========================================================== */
+
+/* Titres des widgets : petits, en capitales, comme la maquette */
+.widget-area .widget .widget-title {
+	margin-bottom: .8em;
+	padding-bottom: 0;
+	border-bottom: 0;
+	font-family: var(--font-text);
+	font-size: .8rem;
+	font-weight: 700;
+	letter-spacing: .05em;
+	text-transform: uppercase;
+	color: var(--color-black);
+}
+
+/* Recherche : champ bordé de noir */
+.widget-area .widget_product_search .search-field {
+	border: 1px solid var(--color-black);
+	border-radius: 6px;
+	background-color: var(--color-white);
+}
+
+/* Curseur de prix : doré et noir au lieu du violet */
+.widget-area .widget_price_filter .price_slider_wrapper .ui-widget-content { background-color: var(--color-cream); }
+.widget-area .widget_price_filter .ui-slider .ui-slider-range { background-color: var(--color-gold); }
+.widget-area .widget_price_filter .ui-slider .ui-slider-handle {
+	border-color: var(--color-black);
+	background-color: var(--color-black);
+}
+
+/* Bouton « Filtrer » : contour noir */
+.widget-area .widget_price_filter .price_slider_amount .button {
+	border: 1px solid var(--color-black);
+	border-radius: 6px;
+	background-color: var(--color-white);
+	font-size: .75rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	color: var(--color-black);
+}
+.widget-area .widget_price_filter .price_slider_amount .button:hover {
+	background-color: var(--color-black);
+	color: var(--color-white);
+}
+
+/* Tailles : S, M, L en boutons ronds, la taille choisie en noir */
+.widget-area .widget_layered_nav .woocommerce-widget-layered-nav-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .6rem;
+	margin: 0;
+}
+.widget-area .widget_layered_nav .woocommerce-widget-layered-nav-list__item {
+	margin: 0;
+	padding: 0;
+}
+.widget-area .widget_layered_nav .woocommerce-widget-layered-nav-list__item::before,
+.widget-area .widget_layered_nav .woocommerce-widget-layered-nav-list__item a::before { display: none; }
+.widget-area .widget_layered_nav .woocommerce-widget-layered-nav-list__item .count { display: none; }
+.widget-area .widget_layered_nav .woocommerce-widget-layered-nav-list__item a {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.6rem;
+	height: 2.6rem;
+	border: 1px solid var(--color-black);
+	border-radius: 50%;
+	background-color: var(--color-white);
+	font-size: .8rem;
+	font-weight: 700;
+	text-decoration: none;
+	color: var(--color-black);
+}
+.widget-area .widget_layered_nav .woocommerce-widget-layered-nav-list__item--chosen a,
+.widget-area .widget_layered_nav .woocommerce-widget-layered-nav-list__item a:hover {
+	background-color: var(--color-black);
+	color: var(--color-white);
+}
+
+/* Filtres actifs : boutons contour, comme « Réinitialiser » sur la maquette */
+.widget-area .widget_layered_nav_filters ul li a {
+	display: inline-block;
+	padding: .5rem 1rem;
+	border: 1px solid var(--color-black);
+	border-radius: 6px;
+	background-color: var(--color-white);
+	font-size: .75rem;
+	font-weight: 700;
+	text-decoration: none;
+	color: var(--color-black);
+}
+.widget-area .widget_layered_nav_filters ul li a::before { color: var(--color-black); }
+/* Fin du bloc US-18.2 */
+
+/* US-18.3 : bouton Filtrer / Réinitialiser tout en bas de la barre de filtres,
+   sous les tailles (le bouton reste dans le formulaire du prix) */
+#secondary.widget-area { position: relative; padding-bottom: 4.5rem; }
+#secondary.widget-area .widget_price_filter .price_slider_amount .button {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	float: none;
+	width: 100%;
+}
+#secondary.widget-area .widget_price_filter .price_slider_amount { text-align: left; }
+/* Fin du bloc US-18.3 */

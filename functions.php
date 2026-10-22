@@ -1188,3 +1188,33 @@ function feuillette_nouveautes() {
 	<?php
 }
 /* Fin du bloc US-16 */
+
+/* ==========================================================
+ * US-18.2 : barre de filtres uniquement sur le catalogue
+ * (Boutique, catégories, collections, résultats de recherche)
+ * Storefront masque la barre et passe en pleine largeur
+ * dès que is_active_sidebar() renvoie false.
+ * ========================================================== */
+add_filter( 'is_active_sidebar', 'feuillette_filtres_catalogue', 10, 2 );
+function feuillette_filtres_catalogue( $actif, $index ) {
+	if ( 'sidebar-1' !== $index || is_admin() ) {
+		return $actif;
+	}
+	return $actif && ( is_shop() || is_product_taxonomy() || is_search() );
+}
+/* Fin du bloc US-18.2 */
+
+/* US-18.1 : curseur de prix par pas de 1 € (au lieu de 10 € par défaut),
+   adapté à des produits entre 1,60 € et 5,20 € */
+add_filter( 'woocommerce_price_filter_widget_step', function () {
+	return 1;
+} );
+/* Fin du bloc US-18.1 */
+
+/* US-18.3 : script du bouton Filtrer / Réinitialiser, sur le catalogue uniquement */
+add_action( 'wp_enqueue_scripts', function () {
+	if ( is_shop() || is_product_taxonomy() || is_search() ) {
+		wp_enqueue_script( 'feuillette-filtres', get_stylesheet_directory_uri() . '/js/feuillette-filtres.js', array( 'jquery' ), '1.0', true );
+	}
+} );
+/* Fin du bloc US-18.3 */
