@@ -1218,3 +1218,90 @@ add_action( 'wp_enqueue_scripts', function () {
 	}
 } );
 /* Fin du bloc US-18.3 */
+
+/* ==========================================================
+ * US-19.2 : 3 tranches de poids réglables
+ * WooCommerce → Réglages → Expédition → Options d'expédition
+ * ========================================================== */
+add_filter( 'woocommerce_shipping_settings', 'feuillette_reglages_poids' );
+function feuillette_reglages_poids( $reglages ) {
+	$nombre = array( 'type' => 'number', 'custom_attributes' => array( 'min' => '0', 'step' => '0.01' ) );
+	$reglages[] = array(
+		'title' => 'Tarifs selon le poids',
+		'type'  => 'title',
+		'desc'  => 'Tarif de la livraison standard selon le poids total de la commande. La livraison express ajoute un supplément. Le retrait en boutique reste gratuit.',
+		'id'    => 'feuillette_poids_section',
+	);
+	$reglages[] = array( 'title' => 'Tranche 1 : jusqu’à (kg)', 'id' => 'feuillette_poids_seuil_1', 'default' => '0.5' ) + $nombre;
+	$reglages[] = array( 'title' => 'Tranche 1 : tarif (€)', 'id' => 'feuillette_poids_tarif_1', 'default' => '3.5' ) + $nombre;
+	$reglages[] = array( 'title' => 'Tranche 2 : jusqu’à (kg)', 'id' => 'feuillette_poids_seuil_2', 'default' => '1' ) + $nombre;
+	$reglages[] = array( 'title' => 'Tranche 2 : tarif (€)', 'id' => 'feuillette_poids_tarif_2', 'default' => '4.5' ) + $nombre;
+	$reglages[] = array( 'title' => 'Tranche 3 : au-delà, tarif (€)', 'id' => 'feuillette_poids_tarif_3', 'default' => '6.5' ) + $nombre;
+	$reglages[] = array( 'title' => 'Supplément livraison express (€)', 'id' => 'feuillette_poids_express', 'default' => '3.4' ) + $nombre;
+	$reglages[] = array( 'type' => 'sectionend', 'id' => 'feuillette_poids_section' );
+	return $reglages;
+}
+
+// Tarif de la livraison standard pour un poids donné
+function feuillette_tarif_selon_poids( $poids ) {
+	$o = function ( $id, $defaut ) {
+		return (float) wc_format_decimal( get_option( $id, $defaut ) );
+	};
+	if ( $poids <= $o( 'feuillette_poids_seuil_1', 0.5 ) ) {
+		return $o( 'feuillette_poids_tarif_1', 3.5 );
+	}
+	if ( $poids <= $o( 'feuillette_poids_seuil_2', 1 ) ) {
+		return $o( 'feuillette_poids_tarif_2', 4.5 );
+	}
+	return $o( 'feuillette_poids_tarif_3', 6.5 );
+}
+/* Fin du morceau 1 US-19 */
+
+/* ==========================================================
+ * US-19.1 : tarif de livraison selon le poids total de la commande
+ * ========================================================== */
+add_filter( 'woocommerce_package_rates', 'feuillette_livraison_selon_poids', 20, 2 );
+function feuillette_livraison_selon_poids( $rates, $package ) {
+	$poids = 0;
+	foreach ( $package['contents'] as $ligne ) {
+		$poids += (float) $ligne['data']->get_weight() * $ligne['quantity'];
+	}
+	$tarif   = feuillette_tarif_selon_poids( $poids );
+	$express = (float) wc_format_decimal( get_option( 'feuillette_poids_express', 3.4 ) );
+
+	foreach ( $rates as $rate ) {
+		if ( 'flat_rate' !== $rate->get_method_id() ) {
+			continue;
+		}
+		$libelle = strtolower( $rate->get_label() );
+		if ( false !== strpos( $libelle, 'express' ) ) {
+			$rate->set_cost( $tarif + $express );
+		} elseif ( false !== strpos( $libelle, 'standard' ) ) {
+			$rate->set_cost( $tarif );
+		}
+	}
+	return $rates;
+}
+
+// Recalcul des tarifs dès que l'administrateur change une tranche
+add_filter( 'woocommerce_cart_shipping_packages', function ( $packages ) {
+	foreach ( $packages as $i => $package ) {
+		$packages[ $i ]['feuillette_tranches'] = array(
+			get_option( 'feuillette_poids_seuil_1' ), get_option( 'feuillette_poids_tarif_1' ),
+			get_option( 'feuillette_poids_seuil_2' ), get_option( 'feuillette_poids_tarif_2' ),
+			get_option( 'feuillette_poids_tarif_3' ), get_option( 'feuillette_poids_express' ),
+		);
+	}
+	return $packages;
+} );
+
+/* US-19.3 : poids de la commande affiché avant les modes de livraison */
+add_action( 'woocommerce_cart_totals_before_shipping', 'feuillette_ligne_poids' );
+add_action( 'woocommerce_review_order_before_shipping', 'feuillette_ligne_poids' );
+function feuillette_ligne_poids() {
+	printf(
+		'<tr><th>Poids de la commande</th><td data-title="Poids de la commande">%s</td></tr>',
+		esc_html( wc_format_weight( WC()->cart->get_cart_contents_weight() ) )
+	);
+}
+/* Fin du bloc US-19 */
