@@ -1820,13 +1820,13 @@ body.post-type-archive-membre .content-area { margin-bottom: 0; }
 /* ==========================================================
    US-12.3 : bandeau vert des pages Collection
    ========================================================== */
-body.tax-collection .site-main .woocommerce-products-header {
+body.tax-collection .woocommerce-products-header {
 	margin: 0 calc(50% - 50vw) 3em;
 	padding: 3.5em 1.5em 3em;
 	background: #A4B08B;
 	text-align: center;
 }
-body.tax-collection .site-main .woocommerce-products-header__title.page-title {
+body.tax-collection .woocommerce-products-header__title.page-title {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -1838,27 +1838,27 @@ body.tax-collection .site-main .woocommerce-products-header__title.page-title {
 	text-transform: uppercase;
 	color: #1D1D1B;
 }
-body.tax-collection .site-main .woocommerce-products-header__title.page-title::before,
-body.tax-collection .site-main .woocommerce-products-header__title.page-title::after {
+body.tax-collection .woocommerce-products-header__title.page-title::before,
+body.tax-collection .woocommerce-products-header__title.page-title::after {
 	content: "";
 	flex: 0 1 6em;
 	height: 3px;
 	border-radius: 3px;
 	background: #fff;
 }
-body.tax-collection .site-main .woocommerce-products-header .term-description {
+body.tax-collection .woocommerce-products-header .term-description {
 	max-width: 34em;
 	margin: 0 auto;
 	color: #1D1D1B;
 }
-body.tax-collection .site-main .woocommerce-products-header .term-description p:last-child {
+body.tax-collection .woocommerce-products-header .term-description p:last-child {
 	margin-bottom: 0;
 }
 /* Fin du bloc US-12.3 bandeau */
 
 /* US-12.3 : bandeau collé au header et fil d'Ariane dessous */
 body.tax-collection .site-header { margin-bottom: 0; }
-body.tax-collection .site-main .woocommerce-products-header { margin-bottom: 0; }
+body.tax-collection .woocommerce-products-header { margin-bottom: 0; }
 body.tax-collection .site-main .equipe-fil { margin: 2.5em 0 1.5em; font-size: .85em; }
 body.tax-collection .site-main .equipe-fil a:first-of-type::before { display: none; }
 body.tax-collection .site-main .equipe-fil__sep { margin: 0 .6em; }
@@ -2332,3 +2332,10 @@ body .star-rating span::before { color: #A98E58; }
 	overflow-wrap: normal;
 }
 /* Fin du correctif Mon compte */
+
+/* Correctif : bandeau des collections au-dessus des deux colonnes.
+   L'espace passe sous le bandeau, pour que la barre de filtres
+   et le fil d'Ariane démarrent à la même hauteur */
+body.tax-collection .woocommerce-products-header { margin-bottom: 2.5em; }
+body.tax-collection .site-main .equipe-fil { margin-top: 0; }
+/* Fin du correctif bandeau CSS */

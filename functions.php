@@ -1451,3 +1451,14 @@ add_filter( 'wpseo_opengraph_type', function ( $type ) {
 	return ( function_exists( 'is_product' ) && is_product() ) ? 'product' : $type;
 } );
 /* Fin du bloc US-21 */
+
+/* Correctif IT-12 / IT-18 : sur les pages de collection et de catégorie,
+   le bandeau est placé au-dessus des deux colonnes (contenu + barre de filtres)
+   pour que la barre de filtres commence sous le bandeau */
+add_action( 'wp', function () {
+	if ( is_product_taxonomy() && function_exists( 'woocommerce_product_taxonomy_archive_header' ) ) {
+		remove_action( 'woocommerce_shop_loop_header', 'woocommerce_product_taxonomy_archive_header' );
+		add_action( 'storefront_content_top', 'woocommerce_product_taxonomy_archive_header', 5 );
+	}
+} );
+/* Fin du correctif bandeau */
