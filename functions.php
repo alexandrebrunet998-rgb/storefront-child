@@ -1442,3 +1442,12 @@ add_filter( 'woocommerce_update_order_review_fragments', function ( $fragments )
 	return $fragments;
 } );
 /* Fin du correctif US-20 */
+
+/* ==========================================================
+ * US-21.2 : Open Graph — les fiches produits sont déclarées
+ * en « product » (Yoast les déclare en « article » par défaut)
+ * ========================================================== */
+add_filter( 'wpseo_opengraph_type', function ( $type ) {
+	return ( function_exists( 'is_product' ) && is_product() ) ? 'product' : $type;
+} );
+/* Fin du bloc US-21 */
