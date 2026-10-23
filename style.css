@@ -2317,3 +2317,18 @@ body .star-rating span::before { color: #A98E58; }
 #feuillette_jour_field label.radio .required,
 #feuillette_plage_field label.radio .required { display: none; }
 /* Fin du correctif US-20 CSS */
+
+/* Correctif Mon compte : le menu garde une largeur fixe et ses libellés
+   restent sur une ligne, même quand le contenu à droite est large */
+.woocommerce-account .woocommerce-MyAccount-navigation {
+	width: 220px;
+	min-width: 220px;
+	max-width: 100%;
+	flex-shrink: 0;
+}
+.woocommerce-account .woocommerce-MyAccount-navigation ul li a {
+	white-space: nowrap;
+	word-break: normal;
+	overflow-wrap: normal;
+}
+/* Fin du correctif Mon compte */
